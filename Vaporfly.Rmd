@@ -1,0 +1,163 @@
+---
+title: "Vaporfly"
+author: "Robert West"
+date: "5/11/2021"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+```
+
+# Introduction
+
+Since their introduction to the market in 2016, Nike’s `Vaporfly` shoes have set the marathon community ablaze. The shoes are supposedly designed with the intent of optimizing every step that a runner takes. Huge accomplishments in marathon racing have been made during this time as well, including Nike’s project of breaking the daunting 2-hour barrier. The release of `Vaporflys` along with the decrease in marathon times has led many to criticize the use of the shoes, suggesting that there is a substantial mechanical advantage to those who wear them. Some have gone as far to call the use of the shoes “Mechanical Doping” and call for bans on them in official races. The goal of this analysis is not to argue for or against their use, but simply to determine if the use of Nike Vaporflys has any effect on the time of marathon runners and if that effect is changed across gender, individual runner, and marathon course. 
+
+# Packages 
+
+```{r}
+library(rjags)#MCMC
+library(coda)#MCMC
+library(ggplot2)#Data Visualization
+library(tidyr)#Data tidying
+library(dplyr)#Data wrangling
+library(varhandle)
+library(knitr)#Display tables
+library(readr)
+```
+
+# Data Import
+
+```{r}
+men = read_csv("men_sampled_shoe.csv", col_names=T)%>%
+  select(name_age, match_name, marathon, year, time_minutes, vaporfly)%>%
+  mutate(sex=0)
+women = read_csv("women_sampled_shoe.csv", col_names=T)%>%
+  select(name_age, match_name, marathon, year, time_minutes, vaporfly)%>%
+  mutate(sex=1)
+```
+
+
+# Data Cleaning
+```{r}
+final = full_join(men, women) %>%
+  mutate(
+    name_age = trimws(name_age, which="right"),
+    age = ifelse(check.numeric(substr(name_age, nchar(name_age)-2, nchar(name_age)-1)), 
+                 as.numeric(substr(name_age, nchar(name_age)-2, nchar(name_age)-1)),
+                 0)
+  )%>%
+  filter(!is.na(vaporfly))
+
+#Transform the marathon variable to a dummy variable for JAGS
+final = cbind(final, to.dummy(v=final$marathon, prefix = "marathon"))
+#MAY NEED TO TAKE OUT LAKEFRONT MARATHON
+```
+
+
+# Visualizations
+```{r}
+ggplot(data=final, mapping=aes(x=time_minutes))+
+  labs(x="Time in Minutes", title = "FIGURE 1: Histogram of Time(min) for all runners")+
+  geom_histogram(bins=75, fill="red", col="black")
+
+ggplot(data=final%>%filter(sex==F), mapping=aes(x=log(time_minutes)))+
+  labs(title="FIGURE 2: Distribution of Men's log time", x="Men's Log minutes")+
+  geom_histogram(bins=85, fill="blue", col="black")
+
+ggplot(data=final%>%filter(sex==T), mapping=aes(x=log(time_minutes)))+
+  labs(title="FIGURE 3: Distribution of Women's log time", x="Women's Log minutes")+
+  geom_histogram(bins=85, fill="pink", col="black")
+
+ggplot(data=final, mapping=aes(x=log(time_minutes)), fill=as.factor(sex))+
+  labs(title="FIGURE 2: Histogram of log(time)", x="log(Time)")+
+  geom_histogram(bins=75, col="black")
+
+ggplot(data=final, mapping=aes(x=time_minutes, fill=vaporfly))+
+  geom_histogram(bins = 60)
+
+ggplot(data=final%>%filter(sex==0), mapping=aes(x=time_minutes, fill=vaporfly))+
+  geom_histogram(bins = 60)
+
+ggplot(data=final%>%filter(sex==1), mapping=aes(x=time_minutes, fill=vaporfly))+
+  geom_histogram(bins = 60)
+
+ggplot(data=final%>%filter(sex==0), mapping=aes(x=vaporfly, y=time_minutes, col=vaporfly))+
+  geom_boxplot()
+
+ggplot(data=final%>%filter(sex==1), mapping=aes(x=vaporfly, y=time_minutes, col=vaporfly))+
+  geom_boxplot()
+
+```
+
+
+
+
+
+
+
+
+# Methods
+
+To determine the effect of Vaporflys, I utilized a mixture of Bayesian Linear Regression, Bayesian Mixed-Random Effects, and Bayesian Multi-level Interaction Models to attempt to explain the overall effect that the shoes have on marathon times when applied to different genders, runners, and courses. Upon first inspection, the distribution of time was bi-modal (figure 1). 
+
+```{r}
+ggplot(data=final, mapping=aes(x=time_minutes))+
+  labs(x="Time in Minutes", title = "FIGURE 1: Histogram of Time(min) for all runners")+
+  geom_histogram(bins=75, fill="red", col="black")
+```
+
+The 2 peaks of this distribution were explained by the differences in male and female performances. The distributions of time conditioned on sex were both bell-shaped and skewed to the right, which suggests that sex should play a role in the marathon time of an individual. While not surprising, this added the need to include sex as a predictor in each model to avoid fitting every model for men and women.
+
+```{r}
+ggplot(data=final, mapping=aes(x=time_minutes))+
+  labs(x="Time in Minutes", 
+       title = "Histogram of Time(min) for all runners by Sex", 
+       fill="Sex")+
+  geom_histogram(mapping=aes(fill=factor(sex, levels = c(0, 1), labels=c("Male", "Female"))), bins=75, alpha=0.7, position = "identity")
+```
+
+For every model, instead of treating the raw time as the response, I treat log(time) as the response as the time variable was a little too right-skewed to meet the Normality condition of my models. Taking the log allowed for more reasonable Gaussian assumptions (Figure 2, 3). Using a consistent Log-Normal likelihood allowed for more precise model comparison after fitting as well.
+
+```{r}
+ggplot(data=final%>%filter(sex==F), mapping=aes(x=log(time_minutes)))+
+  labs(title="FIGURE 2: Distribution of Men's log time", x="Men's Log minutes")+
+  geom_histogram(bins=85, fill="blue", col="black")
+
+ggplot(data=final%>%filter(sex==T), mapping=aes(x=log(time_minutes)))+
+  labs(title="FIGURE 3: Distribution of Women's log time", x="Women's Log minutes")+
+  geom_histogram(bins=85, fill="pink", col="black")
+```
+
+# Models Under Consideration
+
+## Model 1
+
+\begin{align*}
+log(Y_i) \sim N(\mu_i, \sigma^2)\\
+\mu_i = B_0 + B_1V_i\\
+V_i \in {0,1}: Vaporfly_i\\
+B_0, B_1 \sim N(0, (\sqrt{10})^2)\\
+\sigma^2 \sim InvGamma(0.1, 0.1)
+\end{align*}
+
+## Model 2
+
+## Model 3
+
+## Model 4
+
+## Model 5
+
+
+
+
+
+
+
+
+

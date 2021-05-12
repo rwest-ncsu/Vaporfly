@@ -284,7 +284,7 @@ log(Y_i) \sim N(\mu_i, \sigma^2)\\
 \mu_i = \beta_0+\beta1V_i+\beta_2S_i+\beta_3S_i*V_i + \alpha_i\\
 V_i \in 0,1: Vaporfly\\
 S_i \in 0,1: Sex\\
-\alpha_i: effect \space of \space maraton \space of \space runner_i
+\alpha_i: effect \space of \space maraton \space of \space course\\
 \beta_i \sim N(0, 10^2)\\
 \alpha_i \sim N(0, 10^2)
 \sigma^2 \sim InvGamma(0.1, 1)\\
@@ -356,13 +356,71 @@ Clearly, all of the $\alpha$ effects behave similarly and produced relatively si
 
 $$
 log(Y_i) \sim N(\mu_i, \sigma^2)\\
-\mu_i = \beta_0+\alpha_i+\beta1V_i+\beta_2S_i+\beta_3S_i*V_i + \alpha_i*V_i + \\
-V_i \in 0,1: Vaporfly\\
-S_i \in 0,1: Sex\\
-\alpha_i: effect \space of \space maraton \space of \space runner_i
-\beta_i \sim N(0, 10^2)\\
-\sigma^2 \sim InvGamma(0.1, 1)\\
+\mu_i = B_0+B_1V_i+B_2S_i+M_i+R_i+C_1M_iR_i+C_2R_iV_i+C_3S_iV_i+C_4M_iV_i\\
+V_i : Indicator \space of \space Vaporflys\\
+S_i : Sex\\
+M_i: Effect \space of \space Marathon \space of \space Y_i\\
+R_i: Effect \space of \space Runner \space of \space Y_i\\
+B_0, B_1, B_2 \sim N(0, (1/10)^2)\\
+M_i \sim N(0, (1/10)^2)\\
+R_i \sim N(0, (1/10)^2)\\
+C_1, C_2, C_3, C_4 \sim N(0, (1/10)^2)\\
+\sigma^2 \sim InvGamma(0.1, 1)
 $$
+
+
+
+```{r}
+X_mod = X%>%select(1, vaporfly, sex, marathon, match_name)%>%
+  mutate(marathon = as.numeric(factor(marathon)),
+         vaporfly = as.numeric(vaporfly),
+         runner = as.numeric(factor(match_name)))%>%
+  select(-match_name)
+
+n_run = max(X_mod$runner)
+n_mar = max(X_mod$marathon)
+
+data = list(logy=logy, X_mod=X_mod, n_run=n_run, n_mar=n_mar, n=n)
+
+model_string = textConnection("model{
+    #likelihood
+    for(i in 1:n){
+      logy[i] ~ dnorm(mu[i], tau)
+      mu[i] = B0 + B1*X_mod[i,2] + B2*X_mod[i,3] + 
+      M[X_mod[i,4]] + R[X_mod[i,5]] + 
+      C1*M[X_mod[i,4]]*R[X_mod[i,5]] + C2*R[X_mod[i,5]]*X_mod[i,2] + 
+      C3*X_mod[i,3]*X_mod[i,2] + C4*X_mod[i,2]*M[X_mod[i,4]]
+    }
+    
+    #Random marathon effect
+    for(j in 1:n_mar){
+      M[j] ~ dnorm(0, 1)
+    }
+    
+    #Random runner effect
+    for(k in 1:n_run){
+      R[k] ~ dnorm(0, 1)
+    }
+    
+    #Priors
+    B0~dnorm(0, 1)
+    B1~dnorm(0, 1)
+    B2~dnorm(0, 1)
+    C1~dnorm(0, 1)
+    C2~dnorm(0, 1)
+    C3~dnorm(0, 1)
+    C4~dnorm(0, 1)
+    tau~dgamma(0.1, 1)
+    sigma = 1/sqrt(tau)
+}")
+
+inits = list(B0=0, B1=0, B2=0, C1=0, C2=0, C3=0,C4=0, M=rep(0, n_mar), R=rep(0, n_run), tau=1)
+model = jags.model(model_string, data=data, inits = inits, n.chains = 2, quiet=T)
+update(model, 1000, progress.bar="none")
+
+params = c("B0", "B1", "B2","C1", "C2", "C3", "C4", "sigma", "M", "R")
+samples = coda.samples(model, variable.names = params, n.iter=1000, progress.bar="none")
+```
 
   
 

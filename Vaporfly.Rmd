@@ -51,10 +51,6 @@ final = full_join(men, women) %>%
                  0)
   )%>%
   filter(!is.na(vaporfly))
-
-#Transform the marathon variable to a dummy variable for JAGS
-final = cbind(final, to.dummy(v=final$marathon, prefix = "marathon"))
-#MAY NEED TO TAKE OUT LAKEFRONT MARATHON
 ```
 
 
@@ -354,10 +350,19 @@ alphas %>%
        y="Value", main="Mean and Standard Deviation of Alpha effects")
 ```
 
-Clearly, all of the $\alpha$ effects behave similarly and produced relatively similar estimates and Posterior Distributions. Because of this and the low effective sample size of the $\beta_0$ in this model, I propose the removal of the Marathon effect term in the model. 
+Clearly, all of the $\alpha$ effects behave similarly and produced relatively similar estimates and Posterior Distributions. Because of this and the low effective sample size of the $\beta_0$ in this model, I propose the removal of the Marathon effect term in the model. However, we have yet to consider the interaction that the use of Vaporflys may have with age and marathon course. Good modeling practice says to include all lower order terms, so I will keep the marathon effect. 
 
 ## Model 5
 
+$$
+log(Y_i) \sim N(\mu_i, \sigma^2)\\
+\mu_i = \beta_0+\alpha_i+\beta1V_i+\beta_2S_i+\beta_3S_i*V_i + \alpha_i*V_i + \\
+V_i \in 0,1: Vaporfly\\
+S_i \in 0,1: Sex\\
+\alpha_i: effect \space of \space maraton \space of \space runner_i
+\beta_i \sim N(0, 10^2)\\
+\sigma^2 \sim InvGamma(0.1, 1)\\
+$$
 
   
 

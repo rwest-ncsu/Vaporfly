@@ -3,10 +3,9 @@ title: "Vaporfly"
 author: "Robert West"
 date: "5/11/2021"
 output: 
-  html_document:
-    toc: yes
+  github_document:
+    toc: TRUE
     toc_depth: 2
-    toc_float: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -257,7 +256,7 @@ model_string = textConnection("model{
       logy[i] ~ dnorm(mu[i], tau)
       mu[i] = inprod(X_mod[i,], B[]) + C*X_mod[i,2]*X_mod[i,3]
     }
-    
+
     #Priors
     for(j in 1:p){
       B[j] ~ dnorm(0, 0.01)
@@ -360,7 +359,7 @@ Clearly, all of the $\alpha$ effects behave similarly and produced relatively si
 ## Model 5
 
 
-
+  
 
 
 

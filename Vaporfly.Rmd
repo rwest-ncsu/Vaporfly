@@ -5,7 +5,7 @@ date: "5/11/2021"
 output: 
   github_document:
     toc: TRUE
-    toc_depth: 2
+    pandoc_args: --webtex
 ---
 
 ```{r setup, include=FALSE}
@@ -59,7 +59,7 @@ final = cbind(final, to.dummy(v=final$marathon, prefix = "marathon"))
 
 
 # Visualizations
-```{r}
+```{r, echo=F}
 ggplot(data=final, mapping=aes(x=time_minutes))+
   labs(x="Time in Minutes", title = "FIGURE 1: Histogram of Time(min) for all runners")+
   geom_histogram(bins=75, fill="red", col="black")
@@ -132,13 +132,13 @@ n = length(logy)
 
 ## Model 1
 
-\begin{align*}
+$$
 log(Y_i) \sim N(\mu_i, \sigma^2)\\
 \mu_i = B_0 + B_1V_i\\
 V_i \in {0,1}: Vaporfly_i\\
 B_0, B_1 \sim N(0, (\sqrt{10})^2)\\
 \sigma^2 \sim InvGamma(0.1, 1)
-\end{align*}
+$$
 
 This model suggests that the only contributing factor to a runner's time is the binary `vaporfly` variable: 
 
@@ -185,14 +185,14 @@ By popular convergence diagnostics (Gelman Statistic and Trace Plots), this mode
 
 ## Model 2
 
-\begin{align*}
+$$
 log(Y_i) \sim N(\mu_i, \sigma^2)\\
 \mu_i = B_0+B_1V_i+B_2S_i\\
 V_i \in 0,1: Vaporfly\\
 S_i \in 0,1: Sex\\
 B_0, B_1, B_2 \sim N(0, (\sqrt{10})^2)\\
 \sigma^2 \sim InvGamma(0.1, 1)\\
-\end{align*}
+$$
 
 ```{r}
 X_mod = X%>%select(1, vaporfly, sex)%>%
@@ -234,14 +234,14 @@ dic_2 = dic.samples(model, n.iter=3000, progress.bar="none")
 
 ## Model 3
 
-\begin{align*}
+$$
 log(Y_i) \sim N(\mu_i, \sigma^2)\\
 \mu_i = \beta_0+\beta1V_i+\beta_2S_i+\beta_3S_i*V_i\\
 V_i \in 0,1: Vaporfly\\
 S_i \in 0,1: Sex\\
 \beta_i \sim N(0, 10^2)\\
 \sigma^2 \sim InvGamma(0.1, 1)\\
-\end{align*}
+$$
 
 ```{r}
 X_mod = X%>%select(1, vaporfly, sex)%>%
@@ -283,7 +283,7 @@ dic_3 = dic.samples(model, n.iter=2000, progress.bar="none")
 
 ## Model 4
 
-\begin{align*}
+$$
 log(Y_i) \sim N(\mu_i, \sigma^2)\\
 \mu_i = \beta_0+\beta1V_i+\beta_2S_i+\beta_3S_i*V_i + \alpha_i\\
 V_i \in 0,1: Vaporfly\\
@@ -292,7 +292,7 @@ S_i \in 0,1: Sex\\
 \beta_i \sim N(0, 10^2)\\
 \alpha_i \sim N(0, 10^2)
 \sigma^2 \sim InvGamma(0.1, 1)\\
-\end{align*}
+$$
 
 ```{r}
 X_mod = X%>%select(1, vaporfly, sex, marathon)%>%

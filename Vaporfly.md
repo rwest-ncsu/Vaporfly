@@ -63,58 +63,7 @@ final = cbind(final, to.dummy(v=final$marathon, prefix = "marathon"))
 
 # Visualizations
 
-``` r
-ggplot(data=final, mapping=aes(x=time_minutes))+
-  labs(x="Time in Minutes", title = "FIGURE 1: Histogram of Time(min) for all runners")+
-  geom_histogram(bins=75, fill="red", col="black")
-```
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
-
-``` r
-ggplot(data=final%>%filter(sex==F), mapping=aes(x=log(time_minutes)))+
-  labs(title="FIGURE 2: Distribution of Men's log time", x="Men's Log minutes")+
-  geom_histogram(bins=85, fill="blue", col="black")
-```
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
-
-``` r
-ggplot(data=final%>%filter(sex==T), mapping=aes(x=log(time_minutes)))+
-  labs(title="FIGURE 3: Distribution of Women's log time", x="Women's Log minutes")+
-  geom_histogram(bins=85, fill="pink", col="black")
-```
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
-
-``` r
-ggplot(data=final, mapping=aes(x=log(time_minutes)), fill=as.factor(sex))+
-  labs(title="FIGURE 2: Histogram of log(time)", x="log(Time)")+
-  geom_histogram(bins=75, col="black")
-```
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->
-
-``` r
-ggplot(data=final, mapping=aes(x=time_minutes, fill=vaporfly))+
-  geom_histogram(bins = 60)
-```
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-5.png)<!-- -->
-
-``` r
-ggplot(data=final%>%filter(sex==0), mapping=aes(x=time_minutes, fill=vaporfly))+
-  geom_histogram(bins = 60)
-```
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-6.png)<!-- -->
-
-``` r
-ggplot(data=final%>%filter(sex==1), mapping=aes(x=time_minutes, fill=vaporfly))+
-  geom_histogram(bins = 60)
-```
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-7.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-5.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-6.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-7.png)<!-- -->
 
 # Methods
 
@@ -158,6 +107,22 @@ n = length(logy)
 # Models Under Consideration
 
 ## Model 1
+
+  
+![
+log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
+\\mu\_i = B\_0 + B\_1V\_i\\\\
+V\_i \\in {0,1}: Vaporfly\_i\\\\
+B\_0, B\_1 \\sim N(0, (\\sqrt{10})^2)\\\\
+\\sigma^2 \\sim InvGamma(0.1, 1)
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%20%2B%20B_1V_i%5C%5C%0AV_i%20%5Cin%20%7B0%2C1%7D%3A%20Vaporfly_i%5C%5C%0AB_0%2C%20B_1%20%5Csim%20N%280%2C%20%28%5Csqrt%7B10%7D%29%5E2%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A
+"
+log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
+\\mu_i = B_0 + B_1V_i\\\\
+V_i \\in {0,1}: Vaporfly_i\\\\
+B_0, B_1 \\sim N(0, (\\sqrt{10})^2)\\\\
+\\sigma^2 \\sim InvGamma(0.1, 1)
+")  
 
 This model suggests that the only contributing factor to a runner’s time
 is the binary `vaporfly` variable:
@@ -205,25 +170,25 @@ dic_1 = dic.samples(model, n.iter=2000, progress.bar="none")
     ##    plus standard error of the mean:
     ## 
     ##           Mean       SD  Naive SE Time-series SE
-    ## B1     5.00600 0.002444 3.864e-05      4.358e-05
-    ## B2    -0.03149 0.006954 1.100e-04      1.215e-04
-    ## sigma  0.09381 0.001622 2.564e-05      2.519e-05
+    ## B1     5.00594 0.002465 3.898e-05      4.294e-05
+    ## B2    -0.03146 0.006990 1.105e-04      1.282e-04
+    ## sigma  0.09383 0.001657 2.619e-05      2.619e-05
     ## 
     ## 2. Quantiles for each variable:
     ## 
     ##           2.5%      25%      50%      75%    97.5%
-    ## B1     5.00119  5.00438  5.00607  5.00765  5.01071
-    ## B2    -0.04515 -0.03615 -0.03136 -0.02692 -0.01788
-    ## sigma  0.09072  0.09267  0.09382  0.09492  0.09714
+    ## B1     5.00106  5.00427  5.00598  5.00758  5.01073
+    ## B2    -0.04523 -0.03631 -0.03144 -0.02674 -0.01746
+    ## sigma  0.09070  0.09266  0.09384  0.09493  0.09720
 
 ![](Vaporfly_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
     ## Potential scale reduction factors:
     ## 
     ##       Point est. Upper C.I.
-    ## B1             1       1.00
-    ## B2             1       1.01
-    ## sigma          1       1.00
+    ## B1             1          1
+    ## B2             1          1
+    ## sigma          1          1
     ## 
     ## Multivariate psrf
     ## 
@@ -235,6 +200,24 @@ more sophisticated models to attempt to characterize the relationship
 more thoroughly.
 
 ## Model 2
+
+  
+![
+log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
+\\mu\_i = B\_0+B\_1V\_i+B\_2S\_i\\\\
+V\_i \\in 0,1: Vaporfly\\\\
+S\_i \\in 0,1: Sex\\\\
+B\_0, B\_1, B\_2 \\sim N(0, (\\sqrt{10})^2)\\\\
+\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%20%28%5Csqrt%7B10%7D%29%5E2%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
+"
+log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
+\\mu_i = B_0+B_1V_i+B_2S_i\\\\
+V_i \\in 0,1: Vaporfly\\\\
+S_i \\in 0,1: Sex\\\\
+B_0, B_1, B_2 \\sim N(0, (\\sqrt{10})^2)\\\\
+\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
+")  
 
 ``` r
 X_mod = X%>%select(1, vaporfly, sex)%>%
@@ -279,19 +262,19 @@ summary(samples)
     ## 1. Empirical mean and standard deviation for each variable,
     ##    plus standard error of the mean:
     ## 
-    ##           Mean       SD  Naive SE Time-series SE
-    ## B[1]   4.93654 0.001915 2.472e-05      4.424e-05
-    ## B[2]  -0.01896 0.003890 5.023e-05      5.871e-05
-    ## B[3]   0.14106 0.002630 3.395e-05      5.711e-05
-    ## sigma  0.05234 0.000921 1.189e-05      1.218e-05
+    ##           Mean        SD  Naive SE Time-series SE
+    ## B[1]   4.93658 0.0018649 2.408e-05      4.142e-05
+    ## B[2]  -0.01897 0.0039110 5.049e-05      5.965e-05
+    ## B[3]   0.14103 0.0026250 3.389e-05      5.711e-05
+    ## sigma  0.05231 0.0009192 1.187e-05      1.187e-05
     ## 
     ## 2. Quantiles for each variable:
     ## 
-    ##           2.5%      25%      50%      75%    97.5%
-    ## B[1]   4.93273  4.93526  4.93659  4.93785  4.94023
-    ## B[2]  -0.02635 -0.02166 -0.01901 -0.01638 -0.01131
-    ## B[3]   0.13588  0.13932  0.14100  0.14281  0.14631
-    ## sigma  0.05056  0.05171  0.05233  0.05294  0.05416
+    ##           2.5%      25%      50%     75%    97.5%
+    ## B[1]   4.93296  4.93533  4.93655  4.9379  4.94027
+    ## B[2]  -0.02676 -0.02151 -0.01896 -0.0164 -0.01135
+    ## B[3]   0.13584  0.13926  0.14104  0.1428  0.14615
+    ## sigma  0.05058  0.05168  0.05228  0.0529  0.05419
 
 ``` r
 gelman.diag(samples)
@@ -300,10 +283,10 @@ gelman.diag(samples)
     ## Potential scale reduction factors:
     ## 
     ##       Point est. Upper C.I.
-    ## B[1]           1       1.01
-    ## B[2]           1       1.01
-    ## B[3]           1       1.00
-    ## sigma          1       1.00
+    ## B[1]           1          1
+    ## B[2]           1          1
+    ## B[3]           1          1
+    ## sigma          1          1
     ## 
     ## Multivariate psrf
     ## 
@@ -315,6 +298,24 @@ dic_2 = dic.samples(model, n.iter=3000, progress.bar="none")
 ```
 
 ## Model 3
+
+  
+![
+log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
+\\mu\_i = \\beta\_0+\\beta1V\_i+\\beta\_2S\_i+\\beta\_3S\_i\*V\_i\\\\
+V\_i \\in 0,1: Vaporfly\\\\
+S\_i \\in 0,1: Sex\\\\
+\\beta\_i \\sim N(0, 10^2)\\\\
+\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2B%5Cbeta_2S_i%2B%5Cbeta_3S_i%2AV_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Cbeta_i%20%5Csim%20N%280%2C%2010%5E2%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
+"
+log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
+\\mu_i = \\beta_0+\\beta1V_i+\\beta_2S_i+\\beta_3S_i*V_i\\\\
+V_i \\in 0,1: Vaporfly\\\\
+S_i \\in 0,1: Sex\\\\
+\\beta_i \\sim N(0, 10^2)\\\\
+\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
+")  
 
 ``` r
 X_mod = X%>%select(1, vaporfly, sex)%>%
@@ -360,20 +361,20 @@ summary(samples)
     ##    plus standard error of the mean:
     ## 
     ##             Mean       SD  Naive SE Time-series SE
-    ## B[1]   4.9364441 0.002310 3.653e-05      6.784e-05
-    ## B[2]  -0.0185867 0.006200 9.803e-05      1.781e-04
-    ## B[3]   0.1412012 0.003273 5.175e-05      9.708e-05
-    ## C     -0.0004753 0.009594 1.517e-04      2.753e-04
-    ## sigma  0.0620439 0.001097 1.734e-05      1.725e-05
+    ## B[1]   4.9364731 0.002278 3.602e-05      6.905e-05
+    ## B[2]  -0.0188373 0.006081 9.615e-05      1.677e-04
+    ## B[3]   0.1411324 0.003269 5.168e-05      9.786e-05
+    ## C     -0.0001531 0.009563 1.512e-04      2.602e-04
+    ## sigma  0.0620780 0.001094 1.731e-05      1.729e-05
     ## 
     ## 2. Quantiles for each variable:
     ## 
-    ##           2.5%       25%        50%       75%     97.5%
-    ## B[1]   4.93200  4.934857  4.9364615  4.938039  4.941062
-    ## B[2]  -0.03072 -0.022773 -0.0185376 -0.014460 -0.006519
-    ## B[3]   0.13465  0.139043  0.1412339  0.143399  0.147464
-    ## C     -0.01869 -0.007046 -0.0006164  0.005926  0.018690
-    ## sigma  0.05991  0.061277  0.0620481  0.062796  0.064157
+    ##           2.5%       25%        50%       75%    97.5%
+    ## B[1]   4.93208  4.934966  4.9364814  4.938034  4.94081
+    ## B[2]  -0.03103 -0.022948 -0.0187429 -0.014728 -0.00702
+    ## B[3]   0.13472  0.138960  0.1411193  0.143309  0.14764
+    ## C     -0.01849 -0.006806 -0.0001725  0.006257  0.01910
+    ## sigma  0.06006  0.061324  0.0620256  0.062839  0.06423
 
 ``` r
 gelman.diag(samples)
@@ -382,11 +383,11 @@ gelman.diag(samples)
     ## Potential scale reduction factors:
     ## 
     ##       Point est. Upper C.I.
-    ## B[1]           1          1
-    ## B[2]           1          1
-    ## B[3]           1          1
-    ## C              1          1
-    ## sigma          1          1
+    ## B[1]           1       1.00
+    ## B[2]           1       1.00
+    ## B[3]           1       1.01
+    ## C              1       1.00
+    ## sigma          1       1.02
     ## 
     ## Multivariate psrf
     ## 
@@ -397,6 +398,30 @@ dic_3 = dic.samples(model, n.iter=2000, progress.bar="none")
 ```
 
 ## Model 4
+
+  
+![
+log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
+\\mu\_i = \\beta\_0+\\beta1V\_i+\\beta\_2S\_i+\\beta\_3S\_i\*V\_i +
+\\alpha\_i\\\\
+V\_i \\in 0,1: Vaporfly\\\\
+S\_i \\in 0,1: Sex\\\\
+\\alpha\_i: effect \\space of \\space maraton \\space of \\space
+runner\_i
+\\beta\_i \\sim N(0, 10^2)\\\\
+\\alpha\_i \\sim N(0, 10^2)
+\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2B%5Cbeta_2S_i%2B%5Cbeta_3S_i%2AV_i%20%2B%20%5Calpha_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Calpha_i%3A%20effect%20%5Cspace%20of%20%5Cspace%20maraton%20%5Cspace%20of%20%5Cspace%20runner_i%0A%5Cbeta_i%20%5Csim%20N%280%2C%2010%5E2%29%5C%5C%0A%5Calpha_i%20%5Csim%20N%280%2C%2010%5E2%29%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
+"
+log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
+\\mu_i = \\beta_0+\\beta1V_i+\\beta_2S_i+\\beta_3S_i*V_i + \\alpha_i\\\\
+V_i \\in 0,1: Vaporfly\\\\
+S_i \\in 0,1: Sex\\\\
+\\alpha_i: effect \\space of \\space maraton \\space of \\space runner_i
+\\beta_i \\sim N(0, 10^2)\\\\
+\\alpha_i \\sim N(0, 10^2)
+\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
+")  
 
 ``` r
 X_mod = X%>%select(1, vaporfly, sex, marathon)%>%
@@ -438,37 +463,37 @@ gelman.diag(samples)
     ## Potential scale reduction factors:
     ## 
     ##           Point est. Upper C.I.
-    ## B0              2.26       4.49
+    ## B0              1.22       1.75
     ## B1              1.00       1.00
     ## B2              1.00       1.00
-    ## alpha[1]        2.26       4.48
-    ## alpha[2]        2.26       4.48
-    ## alpha[3]        2.26       4.48
-    ## alpha[4]        2.21       4.36
-    ## alpha[5]        2.18       4.27
-    ## alpha[6]        2.26       4.48
-    ## alpha[7]        2.25       4.47
-    ## alpha[8]        2.24       4.44
-    ## alpha[9]        2.25       4.46
-    ## alpha[10]       1.74       3.09
-    ## alpha[11]       2.11       4.08
-    ## alpha[12]       2.24       4.44
-    ## alpha[13]       2.26       4.48
-    ## alpha[14]       2.25       4.46
-    ## alpha[15]       2.24       4.44
-    ## alpha[16]       2.10       4.06
-    ## alpha[17]       2.21       4.36
-    ## alpha[18]       2.25       4.46
-    ## alpha[19]       2.25       4.45
-    ## alpha[20]       2.22       4.37
-    ## alpha[21]       2.22       4.37
-    ## alpha[22]       1.93       3.60
-    ## alpha[23]       2.25       4.46
+    ## alpha[1]        1.22       1.74
+    ## alpha[2]        1.22       1.74
+    ## alpha[3]        1.22       1.74
+    ## alpha[4]        1.21       1.71
+    ## alpha[5]        1.20       1.69
+    ## alpha[6]        1.22       1.74
+    ## alpha[7]        1.22       1.74
+    ## alpha[8]        1.22       1.74
+    ## alpha[9]        1.22       1.74
+    ## alpha[10]       1.12       1.43
+    ## alpha[11]       1.19       1.66
+    ## alpha[12]       1.22       1.74
+    ## alpha[13]       1.22       1.74
+    ## alpha[14]       1.22       1.74
+    ## alpha[15]       1.22       1.73
+    ## alpha[16]       1.19       1.64
+    ## alpha[17]       1.21       1.71
+    ## alpha[18]       1.22       1.74
+    ## alpha[19]       1.22       1.74
+    ## alpha[20]       1.21       1.72
+    ## alpha[21]       1.21       1.71
+    ## alpha[22]       1.15       1.54
+    ## alpha[23]       1.22       1.74
     ## sigma           1.00       1.00
     ## 
     ## Multivariate psrf
     ## 
-    ## 1.57
+    ## 1.1
 
 ``` r
 #Compute DIC
@@ -479,7 +504,8 @@ This model suggests that there is no significant difference between
 marathon courses since the effective sample sizes are so small even
 after 50,000 iterations of MCMC. From this, I conclude that the marathon
 effects are constant and are “encoded” in the constant intercept
-\(\beta_0\). For further justification:
+![\\beta\_0](https://latex.codecogs.com/png.latex?%5Cbeta_0 "\\beta_0").
+For further justification:
 
 ``` r
 alphas = apply(samples[[1]][ , 4:26],
@@ -501,9 +527,12 @@ alphas %>%
 
 ![](Vaporfly_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
-Clearly, all of the \(\alpha\) effects behave similarly and produced
-relatively similar estimates and Posterior Distributions. Because of
-this and the low effective sample size of the \(\beta_0\) in this model,
-I propose the removal of the Marathon effect term in the model.
+Clearly, all of the
+![\\alpha](https://latex.codecogs.com/png.latex?%5Calpha "\\alpha")
+effects behave similarly and produced relatively similar estimates and
+Posterior Distributions. Because of this and the low effective sample
+size of the ![\\beta\_0](https://latex.codecogs.com/png.latex?%5Cbeta_0
+"\\beta_0") in this model, I propose the removal of the Marathon effect
+term in the model.
 
 ## Model 5

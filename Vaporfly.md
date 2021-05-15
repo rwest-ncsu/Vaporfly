@@ -55,10 +55,6 @@ final = full_join(men, women) %>%
                  0)
   )%>%
   filter(!is.na(vaporfly))
-
-#Transform the marathon variable to a dummy variable for JAGS
-final = cbind(final, to.dummy(v=final$marathon, prefix = "marathon"))
-#MAY NEED TO TAKE OUT LAKEFRONT MARATHON
 ```
 
 # Visualizations
@@ -170,16 +166,16 @@ dic_1 = dic.samples(model, n.iter=2000, progress.bar="none")
     ##    plus standard error of the mean:
     ## 
     ##           Mean       SD  Naive SE Time-series SE
-    ## B1     5.00594 0.002465 3.898e-05      4.294e-05
-    ## B2    -0.03146 0.006990 1.105e-04      1.282e-04
-    ## sigma  0.09383 0.001657 2.619e-05      2.619e-05
+    ## B1     5.00599 0.002480 3.921e-05      4.367e-05
+    ## B2    -0.03138 0.006998 1.107e-04      1.255e-04
+    ## sigma  0.09389 0.001670 2.640e-05      2.668e-05
     ## 
     ## 2. Quantiles for each variable:
     ## 
     ##           2.5%      25%      50%      75%    97.5%
-    ## B1     5.00106  5.00427  5.00598  5.00758  5.01073
-    ## B2    -0.04523 -0.03631 -0.03144 -0.02674 -0.01746
-    ## sigma  0.09070  0.09266  0.09384  0.09493  0.09720
+    ## B1     5.00118  5.00428  5.00599  5.00770  5.01067
+    ## B2    -0.04529 -0.03609 -0.03133 -0.02650 -0.01819
+    ## sigma  0.09072  0.09273  0.09386  0.09495  0.09720
 
 ![](Vaporfly_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
@@ -263,18 +259,18 @@ summary(samples)
     ##    plus standard error of the mean:
     ## 
     ##           Mean        SD  Naive SE Time-series SE
-    ## B[1]   4.93658 0.0018649 2.408e-05      4.142e-05
-    ## B[2]  -0.01897 0.0039110 5.049e-05      5.965e-05
-    ## B[3]   0.14103 0.0026250 3.389e-05      5.711e-05
-    ## sigma  0.05231 0.0009192 1.187e-05      1.187e-05
+    ## B[1]   4.93649 0.0019319 2.494e-05      4.399e-05
+    ## B[2]  -0.01880 0.0039272 5.070e-05      5.618e-05
+    ## B[3]   0.14114 0.0026634 3.438e-05      5.812e-05
+    ## sigma  0.05234 0.0009279 1.198e-05      1.215e-05
     ## 
     ## 2. Quantiles for each variable:
     ## 
-    ##           2.5%      25%      50%     75%    97.5%
-    ## B[1]   4.93296  4.93533  4.93655  4.9379  4.94027
-    ## B[2]  -0.02676 -0.02151 -0.01896 -0.0164 -0.01135
-    ## B[3]   0.13584  0.13926  0.14104  0.1428  0.14615
-    ## sigma  0.05058  0.05168  0.05228  0.0529  0.05419
+    ##           2.5%      25%      50%      75%    97.5%
+    ## B[1]   4.93267  4.93519  4.93651  4.93778  4.94025
+    ## B[2]  -0.02645 -0.02145 -0.01880 -0.01617 -0.01099
+    ## B[3]   0.13602  0.13929  0.14111  0.14299  0.14637
+    ## sigma  0.05055  0.05171  0.05234  0.05295  0.05418
 
 ``` r
 gelman.diag(samples)
@@ -361,20 +357,20 @@ summary(samples)
     ##    plus standard error of the mean:
     ## 
     ##             Mean       SD  Naive SE Time-series SE
-    ## B[1]   4.9364731 0.002278 3.602e-05      6.905e-05
-    ## B[2]  -0.0188373 0.006081 9.615e-05      1.677e-04
-    ## B[3]   0.1411324 0.003269 5.168e-05      9.786e-05
-    ## C     -0.0001531 0.009563 1.512e-04      2.602e-04
-    ## sigma  0.0620780 0.001094 1.731e-05      1.729e-05
+    ## B[1]   4.9366374 0.002346 3.709e-05      7.766e-05
+    ## B[2]  -0.0191371 0.006079 9.611e-05      1.700e-04
+    ## B[3]   0.1409369 0.003382 5.347e-05      1.023e-04
+    ## C      0.0003999 0.009417 1.489e-04      2.649e-04
+    ## sigma  0.0620621 0.001087 1.718e-05      1.718e-05
     ## 
     ## 2. Quantiles for each variable:
     ## 
-    ##           2.5%       25%        50%       75%    97.5%
-    ## B[1]   4.93208  4.934966  4.9364814  4.938034  4.94081
-    ## B[2]  -0.03103 -0.022948 -0.0187429 -0.014728 -0.00702
-    ## B[3]   0.13472  0.138960  0.1411193  0.143309  0.14764
-    ## C     -0.01849 -0.006806 -0.0001725  0.006257  0.01910
-    ## sigma  0.06006  0.061324  0.0620256  0.062839  0.06423
+    ##           2.5%       25%        50%      75%     97.5%
+    ## B[1]   4.93192  4.935073  4.9366195  4.93825  4.941145
+    ## B[2]  -0.03152 -0.023179 -0.0190998 -0.01526 -0.007166
+    ## B[3]   0.13430  0.138717  0.1409391  0.14318  0.147436
+    ## C     -0.01865 -0.005757  0.0005601  0.00678  0.018334
+    ## sigma  0.05992  0.061340  0.0620667  0.06277  0.064242
 
 ``` r
 gelman.diag(samples)
@@ -384,10 +380,10 @@ gelman.diag(samples)
     ## 
     ##       Point est. Upper C.I.
     ## B[1]           1       1.00
-    ## B[2]           1       1.00
-    ## B[3]           1       1.01
-    ## C              1       1.00
-    ## sigma          1       1.02
+    ## B[2]           1       1.01
+    ## B[3]           1       1.00
+    ## C              1       1.01
+    ## sigma          1       1.00
     ## 
     ## Multivariate psrf
     ## 
@@ -407,17 +403,17 @@ log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
 V\_i \\in 0,1: Vaporfly\\\\
 S\_i \\in 0,1: Sex\\\\
 \\alpha\_i: effect \\space of \\space maraton \\space of \\space
-runner\_i
+course\\\\
 \\beta\_i \\sim N(0, 10^2)\\\\
 \\alpha\_i \\sim N(0, 10^2)
 \\sigma^2 \\sim InvGamma(0.1, 1)\\\\
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2B%5Cbeta_2S_i%2B%5Cbeta_3S_i%2AV_i%20%2B%20%5Calpha_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Calpha_i%3A%20effect%20%5Cspace%20of%20%5Cspace%20maraton%20%5Cspace%20of%20%5Cspace%20runner_i%0A%5Cbeta_i%20%5Csim%20N%280%2C%2010%5E2%29%5C%5C%0A%5Calpha_i%20%5Csim%20N%280%2C%2010%5E2%29%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2B%5Cbeta_2S_i%2B%5Cbeta_3S_i%2AV_i%20%2B%20%5Calpha_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Calpha_i%3A%20effect%20%5Cspace%20of%20%5Cspace%20maraton%20%5Cspace%20of%20%5Cspace%20course%5C%5C%0A%5Cbeta_i%20%5Csim%20N%280%2C%2010%5E2%29%5C%5C%0A%5Calpha_i%20%5Csim%20N%280%2C%2010%5E2%29%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
 "
 log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
 \\mu_i = \\beta_0+\\beta1V_i+\\beta_2S_i+\\beta_3S_i*V_i + \\alpha_i\\\\
 V_i \\in 0,1: Vaporfly\\\\
 S_i \\in 0,1: Sex\\\\
-\\alpha_i: effect \\space of \\space maraton \\space of \\space runner_i
+\\alpha_i: effect \\space of \\space maraton \\space of \\space course\\\\
 \\beta_i \\sim N(0, 10^2)\\\\
 \\alpha_i \\sim N(0, 10^2)
 \\sigma^2 \\sim InvGamma(0.1, 1)\\\\
@@ -463,37 +459,37 @@ gelman.diag(samples)
     ## Potential scale reduction factors:
     ## 
     ##           Point est. Upper C.I.
-    ## B0              1.22       1.75
+    ## B0              1.07       1.28
     ## B1              1.00       1.00
     ## B2              1.00       1.00
-    ## alpha[1]        1.22       1.74
-    ## alpha[2]        1.22       1.74
-    ## alpha[3]        1.22       1.74
-    ## alpha[4]        1.21       1.71
-    ## alpha[5]        1.20       1.69
-    ## alpha[6]        1.22       1.74
-    ## alpha[7]        1.22       1.74
-    ## alpha[8]        1.22       1.74
-    ## alpha[9]        1.22       1.74
-    ## alpha[10]       1.12       1.43
-    ## alpha[11]       1.19       1.66
-    ## alpha[12]       1.22       1.74
-    ## alpha[13]       1.22       1.74
-    ## alpha[14]       1.22       1.74
-    ## alpha[15]       1.22       1.73
-    ## alpha[16]       1.19       1.64
-    ## alpha[17]       1.21       1.71
-    ## alpha[18]       1.22       1.74
-    ## alpha[19]       1.22       1.74
-    ## alpha[20]       1.21       1.72
-    ## alpha[21]       1.21       1.71
-    ## alpha[22]       1.15       1.54
-    ## alpha[23]       1.22       1.74
+    ## alpha[1]        1.07       1.28
+    ## alpha[2]        1.07       1.27
+    ## alpha[3]        1.07       1.28
+    ## alpha[4]        1.06       1.26
+    ## alpha[5]        1.06       1.25
+    ## alpha[6]        1.07       1.27
+    ## alpha[7]        1.07       1.28
+    ## alpha[8]        1.07       1.27
+    ## alpha[9]        1.07       1.27
+    ## alpha[10]       1.03       1.13
+    ## alpha[11]       1.06       1.24
+    ## alpha[12]       1.07       1.27
+    ## alpha[13]       1.07       1.28
+    ## alpha[14]       1.07       1.27
+    ## alpha[15]       1.07       1.27
+    ## alpha[16]       1.05       1.23
+    ## alpha[17]       1.07       1.26
+    ## alpha[18]       1.07       1.27
+    ## alpha[19]       1.07       1.27
+    ## alpha[20]       1.07       1.27
+    ## alpha[21]       1.07       1.26
+    ## alpha[22]       1.04       1.19
+    ## alpha[23]       1.07       1.27
     ## sigma           1.00       1.00
     ## 
     ## Multivariate psrf
     ## 
-    ## 1.1
+    ## 1.04
 
 ``` r
 #Compute DIC
@@ -533,6 +529,92 @@ effects behave similarly and produced relatively similar estimates and
 Posterior Distributions. Because of this and the low effective sample
 size of the ![\\beta\_0](https://latex.codecogs.com/png.latex?%5Cbeta_0
 "\\beta_0") in this model, I propose the removal of the Marathon effect
-term in the model.
+term in the model. However, we have yet to consider the interaction that
+the use of Vaporflys may have with age and marathon course. Good
+modeling practice says to include all lower order terms, so I will keep
+the marathon effect.
 
 ## Model 5
+
+  
+![
+log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
+\\mu\_i =
+B\_0+B\_1V\_i+B\_2S\_i+M\_i+R\_i+C\_1M\_iR\_i+C\_2R\_iV\_i+C\_3S\_iV\_i+C\_4M\_iV\_i\\\\
+V\_i : Indicator \\space of \\space Vaporflys\\\\
+S\_i : Sex\\\\
+M\_i: Effect \\space of \\space Marathon \\space of \\space Y\_i\\\\
+R\_i: Effect \\space of \\space Runner \\space of \\space Y\_i\\\\
+B\_0, B\_1, B\_2 \\sim N(0, (1/10)^2)\\\\
+M\_i \\sim N(0, (1/10)^2)\\\\
+R\_i \\sim N(0, (1/10)^2)\\\\
+C\_1, C\_2, C\_3, C\_4 \\sim N(0, (1/10)^2)\\\\
+\\sigma^2 \\sim InvGamma(0.1, 1)
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%2BM_i%2BR_i%2BC_1M_iR_i%2BC_2R_iV_i%2BC_3S_iV_i%2BC_4M_iV_i%5C%5C%0AV_i%20%3A%20Indicator%20%5Cspace%20of%20%5Cspace%20Vaporflys%5C%5C%0AS_i%20%3A%20Sex%5C%5C%0AM_i%3A%20Effect%20%5Cspace%20of%20%5Cspace%20Marathon%20%5Cspace%20of%20%5Cspace%20Y_i%5C%5C%0AR_i%3A%20Effect%20%5Cspace%20of%20%5Cspace%20Runner%20%5Cspace%20of%20%5Cspace%20Y_i%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%20%281%2F10%29%5E2%29%5C%5C%0AM_i%20%5Csim%20N%280%2C%20%281%2F10%29%5E2%29%5C%5C%0AR_i%20%5Csim%20N%280%2C%20%281%2F10%29%5E2%29%5C%5C%0AC_1%2C%20C_2%2C%20C_3%2C%20C_4%20%5Csim%20N%280%2C%20%281%2F10%29%5E2%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A
+"
+log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
+\\mu_i = B_0+B_1V_i+B_2S_i+M_i+R_i+C_1M_iR_i+C_2R_iV_i+C_3S_iV_i+C_4M_iV_i\\\\
+V_i : Indicator \\space of \\space Vaporflys\\\\
+S_i : Sex\\\\
+M_i: Effect \\space of \\space Marathon \\space of \\space Y_i\\\\
+R_i: Effect \\space of \\space Runner \\space of \\space Y_i\\\\
+B_0, B_1, B_2 \\sim N(0, (1/10)^2)\\\\
+M_i \\sim N(0, (1/10)^2)\\\\
+R_i \\sim N(0, (1/10)^2)\\\\
+C_1, C_2, C_3, C_4 \\sim N(0, (1/10)^2)\\\\
+\\sigma^2 \\sim InvGamma(0.1, 1)
+")  
+
+``` r
+X_mod = X%>%select(1, vaporfly, sex, marathon, match_name)%>%
+  mutate(marathon = as.numeric(factor(marathon)),
+         vaporfly = as.numeric(vaporfly),
+         runner = as.numeric(factor(match_name)))%>%
+  select(-match_name)
+
+n_run = max(X_mod$runner)
+n_mar = max(X_mod$marathon)
+
+data = list(logy=logy, X_mod=X_mod, n_run=n_run, n_mar=n_mar, n=n)
+
+model_string = textConnection("model{
+    #likelihood
+    for(i in 1:n){
+      logy[i] ~ dnorm(mu[i], tau)
+      mu[i] = B0 + B1*X_mod[i,2] + B2*X_mod[i,3] + 
+      M[X_mod[i,4]] + R[X_mod[i,5]] + 
+      C1*M[X_mod[i,4]]*R[X_mod[i,5]] + C2*R[X_mod[i,5]]*X_mod[i,2] + 
+      C3*X_mod[i,3]*X_mod[i,2] + C4*X_mod[i,2]*M[X_mod[i,4]]
+    }
+    
+    #Random marathon effect
+    for(j in 1:n_mar){
+      M[j] ~ dnorm(0, 1)
+    }
+    
+    #Random runner effect
+    for(k in 1:n_run){
+      R[k] ~ dnorm(0, 1)
+    }
+    
+    #Priors
+    B0~dnorm(0, 1)
+    B1~dnorm(0, 1)
+    B2~dnorm(0, 1)
+    C1~dnorm(0, 1)
+    C2~dnorm(0, 1)
+    C3~dnorm(0, 1)
+    C4~dnorm(0, 1)
+    tau~dgamma(0.1, 1)
+    sigma = 1/sqrt(tau)
+}")
+
+inits = list(B0=0, B1=0, B2=0, C1=0, C2=0, C3=0,C4=0, M=rep(0, n_mar), R=rep(0, n_run), tau=1)
+model = jags.model(model_string, data=data, inits = inits, n.chains = 2, quiet=T)
+update(model, 10000, progress.bar="none")
+
+params = c("B0", "B1", "B2","C1", "C2", "C3", "C4", "sigma", "M", "R")
+samples = coda.samples(model, variable.names = params, n.iter=10000, progress.bar="none")
+
+dic_5 = dic.samples(model, n.iter=1000, progress.bar="none")
+```

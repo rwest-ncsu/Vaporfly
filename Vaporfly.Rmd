@@ -284,7 +284,7 @@ log(Y_i) \sim N(\mu_i, \sigma^2)\\
 \mu_i = \beta_0+\beta1V_i+\beta_2S_i+\beta_3S_i*V_i + \alpha_i\\
 V_i \in 0,1: Vaporfly\\
 S_i \in 0,1: Sex\\
-\alpha_i: effect \space of \space maraton \space of \space course\\
+\alpha_i: marathon \space effect\\
 \beta_i \sim N(0, 10^2)\\
 \alpha_i \sim N(0, 10^2)
 \sigma^2 \sim InvGamma(0.1, 1)\\
@@ -416,10 +416,12 @@ model_string = textConnection("model{
 
 inits = list(B0=0, B1=0, B2=0, C1=0, C2=0, C3=0,C4=0, M=rep(0, n_mar), R=rep(0, n_run), tau=1)
 model = jags.model(model_string, data=data, inits = inits, n.chains = 2, quiet=T)
-update(model, 1000, progress.bar="none")
+update(model, 10000, progress.bar="none")
 
 params = c("B0", "B1", "B2","C1", "C2", "C3", "C4", "sigma", "M", "R")
-samples = coda.samples(model, variable.names = params, n.iter=1000, progress.bar="none")
+samples = coda.samples(model, variable.names = params, n.iter=10000, progress.bar="none")
+
+dic_5 = dic.samples(model, n.iter=1000, progress.bar="none")
 ```
 
   

@@ -285,9 +285,15 @@ log(Y_i) \sim N(\mu_i, \sigma^2)\\
 \mu_i = \beta_0+\beta1V_i+\beta_2S_i+\beta_3S_i*V_i + \alpha_i\\
 V_i \in 0,1: Vaporfly\\
 S_i \in 0,1: Sex\\
+<<<<<<< HEAD
 \alpha_i: marathon \space \space effect\\
 \beta_i \sim N(0, 10)\\
 \alpha_i \sim N(0, 10)\\
+=======
+\alpha_i: marathon \space effect\\
+\beta_i \sim N(0, 10^2)\\
+\alpha_i \sim N(0, 10^2)
+>>>>>>> 24b4f91224fdd66519402d7e23e6a968df25e5bf
 \sigma^2 \sim InvGamma(0.1, 1)\\
 $$
 
@@ -423,11 +429,14 @@ params = c("B0", "B1", "B2","C1", "C2", "C3", "C4", "sigma", "M", "R")
 samples = coda.samples(model, variable.names = params, n.iter=10000, progress.bar="none")
 
 dic_5 = dic.samples(model, n.iter=1000, progress.bar="none")
+<<<<<<< HEAD
 ```
 
 This model suffers from over-parameterization. From the MCMC diagnostics, it appears that any term involving marathon effects $M_i, C_1, C_4$ failed to converge. To show this, Below are the trace plots of those parameters. I would move forward by removing these terms in the model. Their inclusion leads to a deceiving DIC value since their posteriors are not approximately Normal even after thousands of MCMC iterations.
 ```{r}
 plot(samples[[1]][, c(4, 8, 9:20)])
+=======
+>>>>>>> 24b4f91224fdd66519402d7e23e6a968df25e5bf
 ```
 
 Proposing the following adjustment to model 5 for the most compicated model fit. I will keep the notation of $C_2, C_3$ to denote that this is a subset of a model previously attempted: 

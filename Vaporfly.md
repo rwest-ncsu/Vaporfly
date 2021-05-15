@@ -150,45 +150,17 @@ model = jags.model(model_string, data=data, inits=inits, n.chains=2, quiet=T)
 update(model, 1000, progress.bar="none")
 
 params = c("B1","B2","sigma")
-samples = coda.samples(model, variable.names = params, n.iter=2000, progress.bar="none")
+samples_1 = coda.samples(model, variable.names = params, n.iter=2000, progress.bar="none")
 
 #Compute DIC
 dic_1 = dic.samples(model, n.iter=2000, progress.bar="none")
 ```
 
-    ## 
-    ## Iterations = 1001:3000
-    ## Thinning interval = 1 
-    ## Number of chains = 2 
-    ## Sample size per chain = 2000 
-    ## 
-    ## 1. Empirical mean and standard deviation for each variable,
-    ##    plus standard error of the mean:
-    ## 
-    ##          Mean       SD  Naive SE Time-series SE
-    ## B1     5.0060 0.002502 3.956e-05      4.527e-05
-    ## B2    -0.0315 0.007048 1.114e-04      1.285e-04
-    ## sigma  0.0939 0.001645 2.600e-05      2.573e-05
-    ## 
-    ## 2. Quantiles for each variable:
-    ## 
-    ##           2.5%      25%      50%      75%    97.5%
-    ## B1     5.00116  5.00427  5.00596  5.00768  5.01089
-    ## B2    -0.04512 -0.03629 -0.03159 -0.02675 -0.01752
-    ## sigma  0.09076  0.09279  0.09387  0.09500  0.09711
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
-
-    ## Potential scale reduction factors:
-    ## 
-    ##       Point est. Upper C.I.
-    ## B1             1       1.01
-    ## B2             1       1.01
-    ## sigma          1       1.00
-    ## 
-    ## Multivariate psrf
-    ## 
-    ## 1
+``` r
+summary(samples_1)
+plot(samples_1)
+gelman.diag(samples_1)
+```
 
 By popular convergence diagnostics (Gelman Statistic and Trace Plots),
 this model has converged to the parameter estimates given. Now, we fit
@@ -243,10 +215,15 @@ model = jags.model(model_string, data=data, inits=inits, n.chains=2, quiet=T)
 update(model, 10000, progress.bar="none")
 
 params = c("B","sigma")
-samples = coda.samples(model, variable.names = params, n.iter=3000, progress.bar="none")
+samples_2 = coda.samples(model, variable.names = params, n.iter=3000, progress.bar="none")
 
+#Compute DIC
+dic_2 = dic.samples(model, n.iter=3000, progress.bar="none")
+```
+
+``` r
 #Convergence criterion
-summary(samples)
+summary(samples_2)
 ```
 
     ## 
@@ -259,39 +236,34 @@ summary(samples)
     ##    plus standard error of the mean:
     ## 
     ##           Mean        SD  Naive SE Time-series SE
-    ## B[1]   4.93657 0.0019214 2.480e-05      4.536e-05
-    ## B[2]  -0.01882 0.0038128 4.922e-05      5.688e-05
-    ## B[3]   0.14100 0.0026405 3.409e-05      5.911e-05
-    ## sigma  0.05230 0.0009221 1.190e-05      1.190e-05
+    ## B[1]   4.93654 0.0019145 2.472e-05      4.225e-05
+    ## B[2]  -0.01887 0.0038798 5.009e-05      5.963e-05
+    ## B[3]   0.14104 0.0026420 3.411e-05      5.580e-05
+    ## sigma  0.05233 0.0009127 1.178e-05      1.199e-05
     ## 
     ## 2. Quantiles for each variable:
     ## 
     ##           2.5%      25%      50%      75%    97.5%
-    ## B[1]   4.93295  4.93526  4.93654  4.93786  4.94037
-    ## B[2]  -0.02612 -0.02145 -0.01883 -0.01628 -0.01114
-    ## B[3]   0.13588  0.13920  0.14104  0.14281  0.14602
-    ## sigma  0.05055  0.05168  0.05228  0.05291  0.05411
+    ## B[1]   4.93285  4.93525  4.93654  4.93784  4.94032
+    ## B[2]  -0.02657 -0.02142 -0.01883 -0.01626 -0.01136
+    ## B[3]   0.13592  0.13926  0.14107  0.14282  0.14622
+    ## sigma  0.05057  0.05171  0.05233  0.05293  0.05416
 
 ``` r
-gelman.diag(samples)
+gelman.diag(samples_2)
 ```
 
     ## Potential scale reduction factors:
     ## 
     ##       Point est. Upper C.I.
-    ## B[1]           1          1
-    ## B[2]           1          1
-    ## B[3]           1          1
-    ## sigma          1          1
+    ## B[1]           1       1.00
+    ## B[2]           1       1.00
+    ## B[3]           1       1.00
+    ## sigma          1       1.01
     ## 
     ## Multivariate psrf
     ## 
     ## 1
-
-``` r
-#Compute DIC
-dic_2 = dic.samples(model, n.iter=3000, progress.bar="none")
-```
 
 ## Model 3
 
@@ -344,9 +316,13 @@ model = jags.model(model_string, data=data, inits=inits, n.chains=2, quiet=T)
 update(model, 1000, progress.bar="none")
 
 params = c("B", "C", "sigma")
-samples = coda.samples(model, n.iter=2000, progress.bar="none", variable.names = params)
+samples_3 = coda.samples(model, n.iter=2000, progress.bar="none", variable.names = params)
 
-summary(samples)
+dic_3 = dic.samples(model, n.iter=2000, progress.bar="none")
+```
+
+``` r
+summary(samples_3)
 ```
 
     ## 
@@ -359,30 +335,30 @@ summary(samples)
     ##    plus standard error of the mean:
     ## 
     ##             Mean       SD  Naive SE Time-series SE
-    ## B[1]   4.936e+00 0.002304 3.644e-05      7.125e-05
-    ## B[2]  -1.888e-02 0.006034 9.541e-05      1.732e-04
-    ## B[3]   1.411e-01 0.003293 5.206e-05      1.031e-04
-    ## C     -2.391e-05 0.009571 1.513e-04      2.647e-04
-    ## sigma  6.208e-02 0.001084 1.714e-05      1.714e-05
+    ## B[1]   4.937e+00 0.002348 3.712e-05      7.293e-05
+    ## B[2]  -1.876e-02 0.006128 9.689e-05      1.849e-04
+    ## B[3]   1.411e-01 0.003335 5.273e-05      1.072e-04
+    ## C     -8.883e-05 0.009612 1.520e-04      2.810e-04
+    ## sigma  6.210e-02 0.001094 1.730e-05      1.704e-05
     ## 
     ## 2. Quantiles for each variable:
     ## 
     ##           2.5%       25%        50%       75%     97.5%
-    ## B[1]   4.93199  4.934947  4.9364741  4.938017  4.940946
-    ## B[2]  -0.03061 -0.022990 -0.0188307 -0.014907 -0.007318
-    ## B[3]   0.13485  0.138893  0.1410689  0.143390  0.147600
-    ## C     -0.01880 -0.006485 -0.0001784  0.006318  0.018376
-    ## sigma  0.06000  0.061345  0.0620616  0.062815  0.064276
+    ## B[1]   4.93201  4.934894  4.937e+00  4.938147  4.941121
+    ## B[2]  -0.03078 -0.022925 -1.880e-02 -0.014625 -0.006707
+    ## B[3]   0.13472  0.138828  1.411e-01  0.143433  0.147691
+    ## C     -0.01904 -0.006553  4.386e-05  0.006446  0.018489
+    ## sigma  0.06000  0.061365  6.207e-02  0.062780  0.064270
 
 ``` r
-gelman.diag(samples)
+gelman.diag(samples_3)
 ```
 
     ## Potential scale reduction factors:
     ## 
     ##       Point est. Upper C.I.
-    ## B[1]           1       1.00
-    ## B[2]           1       1.01
+    ## B[1]           1       1.01
+    ## B[2]           1       1.00
     ## B[3]           1       1.00
     ## C              1       1.00
     ## sigma          1       1.00
@@ -390,10 +366,6 @@ gelman.diag(samples)
     ## Multivariate psrf
     ## 
     ## 1
-
-``` r
-dic_3 = dic.samples(model, n.iter=2000, progress.bar="none")
-```
 
 ## Model 4
 
@@ -452,50 +424,50 @@ model = jags.model(model_string, data=data, inits = inits_random, n.chains = 2, 
 update(model, 10000, progress.bar="none")
 
 params = c("B0", "B1", "B2", "alpha", "sigma")
-samples = coda.samples(model, variable.names = params, n.iter=50000, progress.bar="none")
+samples_4 = coda.samples(model, variable.names = params, n.iter=50000, progress.bar="none")
 
-gelman.diag(samples)
+#Compute DIC
+dic_4 = dic.samples(model, n.iter=50000, progress.bar="none")
+```
+
+``` r
+gelman.diag(samples_4)
 ```
 
     ## Potential scale reduction factors:
     ## 
     ##           Point est. Upper C.I.
-    ## B0              1.01       1.05
+    ## B0              1.10       1.35
     ## B1              1.00       1.00
     ## B2              1.00       1.00
-    ## alpha[1]        1.01       1.05
-    ## alpha[2]        1.01       1.05
-    ## alpha[3]        1.01       1.05
-    ## alpha[4]        1.01       1.04
-    ## alpha[5]        1.01       1.04
-    ## alpha[6]        1.01       1.05
-    ## alpha[7]        1.01       1.05
-    ## alpha[8]        1.01       1.04
-    ## alpha[9]        1.01       1.05
-    ## alpha[10]       1.01       1.03
-    ## alpha[11]       1.01       1.04
-    ## alpha[12]       1.01       1.05
-    ## alpha[13]       1.01       1.05
-    ## alpha[14]       1.01       1.05
-    ## alpha[15]       1.01       1.05
-    ## alpha[16]       1.01       1.04
-    ## alpha[17]       1.01       1.04
-    ## alpha[18]       1.01       1.05
-    ## alpha[19]       1.01       1.05
-    ## alpha[20]       1.01       1.04
-    ## alpha[21]       1.01       1.04
-    ## alpha[22]       1.01       1.04
-    ## alpha[23]       1.01       1.05
+    ## alpha[1]        1.10       1.36
+    ## alpha[2]        1.09       1.35
+    ## alpha[3]        1.09       1.35
+    ## alpha[4]        1.09       1.34
+    ## alpha[5]        1.08       1.31
+    ## alpha[6]        1.09       1.35
+    ## alpha[7]        1.09       1.35
+    ## alpha[8]        1.09       1.34
+    ## alpha[9]        1.09       1.35
+    ## alpha[10]       1.04       1.15
+    ## alpha[11]       1.07       1.28
+    ## alpha[12]       1.09       1.34
+    ## alpha[13]       1.09       1.35
+    ## alpha[14]       1.09       1.35
+    ## alpha[15]       1.09       1.34
+    ## alpha[16]       1.07       1.28
+    ## alpha[17]       1.09       1.33
+    ## alpha[18]       1.09       1.35
+    ## alpha[19]       1.09       1.34
+    ## alpha[20]       1.09       1.33
+    ## alpha[21]       1.09       1.33
+    ## alpha[22]       1.05       1.21
+    ## alpha[23]       1.09       1.35
     ## sigma           1.00       1.00
     ## 
     ## Multivariate psrf
     ## 
-    ## 1.01
-
-``` r
-#Compute DIC
-dic_4 = dic.samples(model, n.iter=50000, progress.bar="none")
-```
+    ## 1.05
 
 This model suggests that there is no significant difference between
 marathon courses since the effective sample sizes are so small even
@@ -505,7 +477,7 @@ effects are constant and are “encoded” in the constant intercept
 For further justification:
 
 ``` r
-alphas = apply(samples[[1]][ , 4:26],
+alphas = apply(samples_4[[1]][ , 4:26],
       MARGIN = 2,
       FUN = function(x){
         c(mean(x), sd(x))
@@ -522,7 +494,7 @@ alphas %>%
        y="Value", main="Mean and Standard Deviation of Alpha effects")
 ```
 
-![](Vaporfly_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 Clearly, all of the
 ![\\alpha](https://latex.codecogs.com/png.latex?%5Calpha "\\alpha")
@@ -615,7 +587,7 @@ model = jags.model(model_string, data=data, inits = inits, n.chains = 2, quiet=T
 update(model, 10000, progress.bar="none")
 
 params = c("B0", "B1", "B2","C1", "C2", "C3", "C4", "sigma", "M", "R")
-samples = coda.samples(model, variable.names = params, n.iter=10000, progress.bar="none")
+samples_5 = coda.samples(model, variable.names = params, n.iter=10000, progress.bar="none")
 
 dic_5 = dic.samples(model, n.iter=1000, progress.bar="none")
 ```
@@ -630,15 +602,16 @@ posteriors are not approximately Normal even after thousands of MCMC
 iterations.
 
 ``` r
-plot(samples[[1]][, c(4, 8, 9:20)])
+plot(samples_5[[1]][, c(4, 8, 9:11)])
 ```
 
-![](Vaporfly_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-16-4.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
 
 Proposing the following adjustment to model 5 for the most compicated
 model fit. I will keep the notation of ![C\_2,
 C\_3](https://latex.codecogs.com/png.latex?C_2%2C%20C_3 "C_2, C_3") to
-denote that this is a subset of a model previously attempted:
+denote that this is a subset of a model previously attempted. I will
+also tighen the prior variances.
 
   
 ![
@@ -647,20 +620,20 @@ log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
 V\_i : Indicator \\space \\space of \\space \\space Vaporflys\\\\
 S\_i : Sex\\\\
 R\_i: Runner \\space \\space effect\\\\
-B\_0, B\_1, B\_2 \\sim N(0, 10)\\\\
-R\_i \\sim N(0, 10)\\\\
-C\_1, C\_2, C\_3, C\_4 \\sim N(0, 10)\\\\
+B\_0, B\_1, B\_2 \\sim N(0, 1)\\\\
+R\_i \\sim N(0, 1)\\\\
+C\_2, C\_3\\sim N(0, 1)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%2BR_i%2BC_2R_iV_i%2BC_3S_iV_i%5C%5C%0AV_i%20%3A%20Indicator%20%5Cspace%20%5Cspace%20of%20%5Cspace%20%5Cspace%20Vaporflys%5C%5C%0AS_i%20%3A%20Sex%5C%5C%0AR_i%3A%20Runner%20%5Cspace%20%5Cspace%20effect%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%2010%29%5C%5C%0AR_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0AC_1%2C%20C_2%2C%20C_3%2C%20C_4%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%2BR_i%2BC_2R_iV_i%2BC_3S_iV_i%5C%5C%0AV_i%20%3A%20Indicator%20%5Cspace%20%5Cspace%20of%20%5Cspace%20%5Cspace%20Vaporflys%5C%5C%0AS_i%20%3A%20Sex%5C%5C%0AR_i%3A%20Runner%20%5Cspace%20%5Cspace%20effect%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%201%29%5C%5C%0AR_i%20%5Csim%20N%280%2C%201%29%5C%5C%0AC_2%2C%20C_3%5Csim%20N%280%2C%201%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A
 "
 log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
 \\mu_i = B_0+B_1V_i+B_2S_i+R_i+C_2R_iV_i+C_3S_iV_i\\\\
 V_i : Indicator \\space \\space of \\space \\space Vaporflys\\\\
 S_i : Sex\\\\
 R_i: Runner \\space \\space effect\\\\
-B_0, B_1, B_2 \\sim N(0, 10)\\\\
-R_i \\sim N(0, 10)\\\\
-C_1, C_2, C_3, C_4 \\sim N(0, 10)\\\\
+B_0, B_1, B_2 \\sim N(0, 1)\\\\
+R_i \\sim N(0, 1)\\\\
+C_2, C_3\\sim N(0, 1)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)
 ")  
 
@@ -685,25 +658,25 @@ model_string = textConnection("model{
     
     #Random runner effect
     for(k in 1:n_run){
-      R[k] ~ dnorm(0, .1)
+      R[k] ~ dnorm(0, 1)
     }
     
     #Priors
-    B0~dnorm(0, .1)
-    B1~dnorm(0, .1)
-    B2~dnorm(0, .1)
-    C2~dnorm(0, .1)
-    C3~dnorm(0, .1)
+    B0~dnorm(0, 1)
+    B1~dnorm(0, 1)
+    B2~dnorm(0, 1)
+    C2~dnorm(0, 1)
+    C3~dnorm(0, 1)
     tau~dgamma(0.1, 1)
     sigma = 1/sqrt(tau)
 }")
 
-inits = list(B0=0, B1=0, B2=0, C2=0, C3=0, R=rep(0, n_run), tau=1)
+inits = list(B0=5, B1=0, B2=0.2, C2=0, C3=0, R=rep(0, n_run), tau=1)
 model = jags.model(model_string, data=data, inits = inits, n.chains = 2, quiet=T)
-update(model, 10000, progress.bar="none")
+update(model, 200000, progress.bar="none")
 
 params = c("B0", "B1", "B2", "C2", "C3", "sigma", "R")
-samples = coda.samples(model, variable.names = params, n.iter=10000, progress.bar="none")
+samples_5 = coda.samples(model, variable.names = params, n.iter=200000, progress.bar="none")
 
 dic_5Star = dic.samples(model, n.iter=10000, progress.bar="none")
 ```
@@ -715,7 +688,7 @@ dic_1
 ```
 
     ## Mean deviance:  -3292 
-    ## penalty 2.96 
+    ## penalty 2.987 
     ## Penalized deviance: -3289
 
 ``` r
@@ -723,29 +696,29 @@ dic_2
 ```
 
     ## Mean deviance:  -5030 
-    ## penalty 4.085 
-    ## Penalized deviance: -5026
+    ## penalty 4.106 
+    ## Penalized deviance: -5025
 
 ``` r
 dic_3
 ```
 
-    ## Mean deviance:  -4921 
-    ## penalty 5.139 
-    ## Penalized deviance: -4916
+    ## Mean deviance:  -4922 
+    ## penalty 5.134 
+    ## Penalized deviance: -4917
 
 ``` r
 dic_4
 ```
 
     ## Mean deviance:  -5146 
-    ## penalty 26.03 
+    ## penalty 26 
     ## Penalized deviance: -5120
 
 ``` r
 dic_5Star
 ```
 
-    ## Mean deviance:  -5291 
-    ## penalty 582.9 
-    ## Penalized deviance: -4708
+    ## Mean deviance:  -5292 
+    ## penalty 583.1 
+    ## Penalized deviance: -4709

@@ -377,18 +377,18 @@ log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
 V\_i \\in 0,1: Vaporfly\\\\
 S\_i \\in 0,1: Sex\\\\
 \\alpha\_i: marathon \\space \\space effect\\\\
-\\beta\_i \\sim N(0, 10)\\\\
-\\alpha\_i \\sim N(0, 10)\\\\
+\\beta\_i \\sim N(0, 1)\\\\
+\\alpha\_i \\sim N(0, 1)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)\\\\
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2B%5Cbeta_2S_i%2B%5Cbeta_3S_i%2AV_i%20%2B%20%5Calpha_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Calpha_i%3A%20marathon%20%5Cspace%20%5Cspace%20effect%5C%5C%0A%5Cbeta_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Calpha_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2B%5Cbeta_2S_i%2B%5Cbeta_3S_i%2AV_i%20%2B%20%5Calpha_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Calpha_i%3A%20marathon%20%5Cspace%20%5Cspace%20effect%5C%5C%0A%5Cbeta_i%20%5Csim%20N%280%2C%201%29%5C%5C%0A%5Calpha_i%20%5Csim%20N%280%2C%201%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
 "
 log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
 \\mu_i = \\beta_0+\\beta1V_i+\\beta_2S_i+\\beta_3S_i*V_i + \\alpha_i\\\\
 V_i \\in 0,1: Vaporfly\\\\
 S_i \\in 0,1: Sex\\\\
 \\alpha_i: marathon \\space \\space effect\\\\
-\\beta_i \\sim N(0, 10)\\\\
-\\alpha_i \\sim N(0, 10)\\\\
+\\beta_i \\sim N(0, 1)\\\\
+\\alpha_i \\sim N(0, 1)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)\\\\
 ")  
 
@@ -409,22 +409,22 @@ model_string = textConnection("model{
   
   #Random effects
   for(j in 1:n_mar){
-    alpha[j] ~ dnorm(0, 10)
+    alpha[j] ~ dnorm(0, 1)
   }
   
-  B0 ~ dnorm(0, 0.1)
-  B1 ~ dnorm(0, 0.1)
-  B2 ~ dnorm(0, 0.1)
+  B0 ~ dnorm(0, 1)
+  B1 ~ dnorm(0, 1)
+  B2 ~ dnorm(0, 1)
   tau ~ dgamma(0.1, 1)
   sigma = 1/sqrt(tau)
 }")
 
 inits_random = list(B0=0, B1=0, B2=0, alpha=rep(0, n_mar), tau=1)
 model = jags.model(model_string, data=data, inits = inits_random, n.chains = 2, quiet=T)
-update(model, 10000, progress.bar="none")
+update(model, 100000, progress.bar="none")
 
 params = c("B0", "B1", "B2", "alpha", "sigma")
-samples_4 = coda.samples(model, variable.names = params, n.iter=50000, progress.bar="none")
+samples_4 = coda.samples(model, variable.names = params, n.iter=200000, progress.bar="none")
 
 #Compute DIC
 dic_4 = dic.samples(model, n.iter=50000, progress.bar="none")
@@ -437,37 +437,37 @@ gelman.diag(samples_4)
     ## Potential scale reduction factors:
     ## 
     ##           Point est. Upper C.I.
-    ## B0              1.10       1.35
+    ## B0              1.17       1.61
     ## B1              1.00       1.00
     ## B2              1.00       1.00
-    ## alpha[1]        1.10       1.36
-    ## alpha[2]        1.09       1.35
-    ## alpha[3]        1.09       1.35
-    ## alpha[4]        1.09       1.34
-    ## alpha[5]        1.08       1.31
-    ## alpha[6]        1.09       1.35
-    ## alpha[7]        1.09       1.35
-    ## alpha[8]        1.09       1.34
-    ## alpha[9]        1.09       1.35
-    ## alpha[10]       1.04       1.15
-    ## alpha[11]       1.07       1.28
-    ## alpha[12]       1.09       1.34
-    ## alpha[13]       1.09       1.35
-    ## alpha[14]       1.09       1.35
-    ## alpha[15]       1.09       1.34
-    ## alpha[16]       1.07       1.28
-    ## alpha[17]       1.09       1.33
-    ## alpha[18]       1.09       1.35
-    ## alpha[19]       1.09       1.34
-    ## alpha[20]       1.09       1.33
-    ## alpha[21]       1.09       1.33
-    ## alpha[22]       1.05       1.21
-    ## alpha[23]       1.09       1.35
+    ## alpha[1]        1.17       1.61
+    ## alpha[2]        1.17       1.61
+    ## alpha[3]        1.17       1.61
+    ## alpha[4]        1.17       1.61
+    ## alpha[5]        1.17       1.60
+    ## alpha[6]        1.17       1.61
+    ## alpha[7]        1.17       1.61
+    ## alpha[8]        1.17       1.61
+    ## alpha[9]        1.17       1.61
+    ## alpha[10]       1.15       1.53
+    ## alpha[11]       1.17       1.59
+    ## alpha[12]       1.17       1.61
+    ## alpha[13]       1.17       1.61
+    ## alpha[14]       1.17       1.61
+    ## alpha[15]       1.17       1.61
+    ## alpha[16]       1.17       1.59
+    ## alpha[17]       1.17       1.60
+    ## alpha[18]       1.17       1.61
+    ## alpha[19]       1.17       1.61
+    ## alpha[20]       1.17       1.60
+    ## alpha[21]       1.17       1.61
+    ## alpha[22]       1.16       1.57
+    ## alpha[23]       1.17       1.61
     ## sigma           1.00       1.00
     ## 
     ## Multivariate psrf
     ## 
-    ## 1.05
+    ## 1.07
 
 This model suggests that there is no significant difference between
 marathon courses since the effective sample sizes are so small even
@@ -712,7 +712,7 @@ dic_4
 ```
 
     ## Mean deviance:  -5146 
-    ## penalty 26 
+    ## penalty 26.03 
     ## Penalized deviance: -5120
 
 ``` r
@@ -722,3 +722,8 @@ dic_5Star
     ## Mean deviance:  -5292 
     ## penalty 583.1 
     ## Penalized deviance: -4709
+
+With relatively limited computational power, I couldn’t run more
+iterations of the final model to achieve a Gelman-Ruben Statistic in an
+acceptable range. 2 Chains of 200,000 iterations didn’t provide
+satisfactory convergence diagnostics. Regardless,

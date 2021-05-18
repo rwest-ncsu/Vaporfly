@@ -57,10 +57,6 @@ final = full_join(men, women) %>%
   filter(!is.na(vaporfly))
 ```
 
-# Visualizations
-
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-5.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-6.png)<!-- -->
-
 # Methods
 
 To determine the effect of Vaporflys, I utilized a mixture of Bayesian
@@ -70,7 +66,7 @@ that the shoes have on marathon times when applied to different genders,
 runners, and courses. Upon first inspection, the distribution of time
 was bi-modal (figure 1).
 
-![](Vaporfly_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 The 2 peaks of this distribution were explained by the differences in
 male and female performances. The distributions of time conditioned on
@@ -79,7 +75,7 @@ sex should play a role in the marathon time of an individual. While not
 surprising, this added the need to include sex as a predictor in each
 model to avoid fitting every model for men and women.
 
-![](Vaporfly_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 For every model, instead of treating the raw time as the response, I
 treat log(time) as the response as the time variable was a little too
@@ -89,7 +85,7 @@ Using a consistent Log-Normal likelihood allowed for more precise model
 comparison after fitting as
 well.
 
-![](Vaporfly_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 # Creating analysis variables
 
@@ -437,37 +433,37 @@ gelman.diag(samples_4)
     ## Potential scale reduction factors:
     ## 
     ##           Point est. Upper C.I.
-    ## B0              1.17       1.61
+    ## B0              1.26       1.95
     ## B1              1.00       1.00
     ## B2              1.00       1.00
-    ## alpha[1]        1.17       1.61
-    ## alpha[2]        1.17       1.61
-    ## alpha[3]        1.17       1.61
-    ## alpha[4]        1.17       1.61
-    ## alpha[5]        1.17       1.60
-    ## alpha[6]        1.17       1.61
-    ## alpha[7]        1.17       1.61
-    ## alpha[8]        1.17       1.61
-    ## alpha[9]        1.17       1.61
-    ## alpha[10]       1.15       1.53
-    ## alpha[11]       1.17       1.59
-    ## alpha[12]       1.17       1.61
-    ## alpha[13]       1.17       1.61
-    ## alpha[14]       1.17       1.61
-    ## alpha[15]       1.17       1.61
-    ## alpha[16]       1.17       1.59
-    ## alpha[17]       1.17       1.60
-    ## alpha[18]       1.17       1.61
-    ## alpha[19]       1.17       1.61
-    ## alpha[20]       1.17       1.60
-    ## alpha[21]       1.17       1.61
-    ## alpha[22]       1.16       1.57
-    ## alpha[23]       1.17       1.61
+    ## alpha[1]        1.26       1.95
+    ## alpha[2]        1.26       1.95
+    ## alpha[3]        1.26       1.95
+    ## alpha[4]        1.26       1.94
+    ## alpha[5]        1.26       1.94
+    ## alpha[6]        1.26       1.95
+    ## alpha[7]        1.26       1.95
+    ## alpha[8]        1.26       1.94
+    ## alpha[9]        1.26       1.94
+    ## alpha[10]       1.24       1.87
+    ## alpha[11]       1.26       1.93
+    ## alpha[12]       1.26       1.94
+    ## alpha[13]       1.26       1.95
+    ## alpha[14]       1.26       1.94
+    ## alpha[15]       1.26       1.94
+    ## alpha[16]       1.26       1.93
+    ## alpha[17]       1.26       1.94
+    ## alpha[18]       1.26       1.95
+    ## alpha[19]       1.26       1.94
+    ## alpha[20]       1.26       1.94
+    ## alpha[21]       1.26       1.94
+    ## alpha[22]       1.25       1.91
+    ## alpha[23]       1.26       1.94
     ## sigma           1.00       1.00
     ## 
     ## Multivariate psrf
     ## 
-    ## 1.07
+    ## 1.11
 
 This model suggests that there is no significant difference between
 marathon courses since the effective sample sizes are so small even
@@ -477,7 +473,7 @@ effects are constant and are “encoded” in the constant intercept
 For further justification:
 
 ``` r
-alphas = apply(samples_4[[1]][ , 4:26],
+alphas = apply(samples_4[[2]][ , 4:26],
       MARGIN = 2,
       FUN = function(x){
         c(mean(x), sd(x))
@@ -494,7 +490,7 @@ alphas %>%
        y="Value", main="Mean and Standard Deviation of Alpha effects")
 ```
 
-![](Vaporfly_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 Clearly, all of the
 ![\\alpha](https://latex.codecogs.com/png.latex?%5Calpha "\\alpha")
@@ -605,7 +601,7 @@ iterations.
 plot(samples_5_large[[1]][, c(4, 8, 9:11)])
 ```
 
-![](Vaporfly_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 Proposing the following adjustment to model 5 for the most compicated
 model fit. I will keep the notation of ![C\_2,
@@ -712,16 +708,16 @@ dic_4
 ```
 
     ## Mean deviance:  -5146 
-    ## penalty 26.03 
+    ## penalty 26.09 
     ## Penalized deviance: -5120
 
 ``` r
 dic_5
 ```
 
-    ## Mean deviance:  -5525 
-    ## penalty 229.8 
-    ## Penalized deviance: -5295
+    ## Mean deviance:  -5513 
+    ## penalty 230.6 
+    ## Penalized deviance: -5282
 
 ``` r
 dic_5Star
@@ -731,7 +727,59 @@ dic_5Star
     ## penalty 583.1 
     ## Penalized deviance: -4709
 
+## Computation
+
+For each model, I used the RJAGS and CODA packages to obtain approximate
+samples from the posterior distribution and run diagnostics for
+convergence. I calculated the Gelman-Rubin statistic and Effective
+Sample Size as well as visually inspected trace plots of parameters to
+confirm convergence. I accepted convergence when the G-R statistic was
+close to 1 and the Effective Sample Size was in the thousands. For the
+first 3 models with few parameters, convergence was fast without
+requiring many iterations in MCMC. When I included random effects and
+interactions of random effects, it took orders of magnitude more
+iterations in MCMC to converge. Across more complex models, I had to
+tighten the priors around coefficients and population variance to
+improve convergence. Even though this is subjective, I justify this by
+the nature of the models. All of these models are trying to detect
+differences in log(time) with relatively little variance. Because of
+this, values of regression coefficients are bound to be very small,
+requiring tighter Gaussian priors. Additionally, there is a sample size
+of n=1618, so the effect of the prior should be relatively small in the
+end.
+
+## Results
+
 With relatively limited computational power, I couldn’t run more
 iterations of the final model to achieve a Gelman-Ruben Statistic in an
 acceptable range. 2 Chains of 200,000 iterations didn’t provide
-satisfactory convergence diagnostics. Regardless,
+satisfactory convergence diagnostics. Regardless, model number 2 has a
+relatively similar deviance without having so many parameters and
+converged multiple orders of magnitude faster than model 5. In
+compliance with parsimony, I select model 2 as being the best model in
+terms of fit.
+
+Across all models fit, no interaction coefficient had a 95% Credible set
+that did not include 0. Because of this, I conclude that the benefit of
+wearing Nike Vaporflys does **NOT** vary across gender, runner, or
+marathon course substantially. However, every model that I fit suggests
+that wearing Vaporflys does substantially decrease a runner’s marathon
+time. Using the estimate from model 2, a runner wearing Vaporflys with
+all other variables held constant decreases their marathon time on
+average by about 1.87% with a 95% credible interval of (1.13, 2.622)%
+
+## Conclusions
+
+While this seems like a relatively small reduction, on the scale of
+marathons, decreasing your overall time by 1 minute in a 2+ hour race is
+considered a huge accomplishment. When the consistency of the athletes
+recorded in this dataset are considered, it is clear that Nike Vaporflys
+significantly decrease marathon times nearly uniformly.
+
+The structure of the data in this study did not lead to very
+sophisticated tests for the effect of Vaporflys on individual runners.
+In the most ideal case, every runner would be measured running a
+marathon while wearing Vaporflys and some other shoes. Because of this,
+I take the result of no effect across runners with caution as there were
+very few runners in this dataset that recorded times with different
+shoes.

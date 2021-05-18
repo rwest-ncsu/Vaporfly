@@ -54,31 +54,6 @@ final = full_join(men, women) %>%
   filter(!is.na(vaporfly))
 ```
 
-
-# Visualizations
-```{r, echo=F}
-ggplot(data=final, mapping=aes(x=time_minutes))+
-  labs(x="Time in Minutes", title = "FIGURE 1: Histogram of Time(min) for all runners")+
-  geom_histogram(bins=75, fill="red", col="black")
-
-ggplot(data=final%>%filter(sex==F), mapping=aes(x=log(time_minutes)))+
-  labs(title="FIGURE 2: Distribution of Men's log time", x="Men's Log minutes")+
-  geom_histogram(bins=85, fill="blue", col="black", position = "identity")
-
-ggplot(data=final%>%filter(sex==T), mapping=aes(x=log(time_minutes)))+
-  labs(title="FIGURE 3: Distribution of Women's log time", x="Women's Log minutes")+
-  geom_histogram(bins=85, fill="pink", col="black", position="identity")
-
-ggplot(data=final, mapping=aes(x=time_minutes, fill=vaporfly))+
-  geom_histogram(bins = 60)
-
-ggplot(data=final%>%filter(sex==0), mapping=aes(x=time_minutes, fill=vaporfly))+
-  geom_histogram(bins = 60)
-
-ggplot(data=final%>%filter(sex==1), mapping=aes(x=time_minutes, fill=vaporfly))+
-  geom_histogram(bins = 60)
-```
-
 # Methods
 
 To determine the effect of Vaporflys, I utilized a mixture of Bayesian Linear Regression, Bayesian Mixed-Random Effects, and Bayesian Multi-level Interaction Models to attempt to explain the overall effect that the shoes have on marathon times when applied to different genders, runners, and courses. Upon first inspection, the distribution of time was bi-modal (figure 1). 
@@ -340,7 +315,7 @@ gelman.diag(samples_4)
 This model suggests that there is no significant difference between marathon courses since the effective sample sizes are so small even after 50,000 iterations of MCMC. From this, I conclude that the marathon effects are constant and are "encoded" in the constant intercept $\beta_0$. For further justification: 
 
 ```{r}
-alphas = apply(samples_4[[1]][ , 4:26],
+alphas = apply(samples_4[[2]][ , 4:26],
       MARGIN = 2,
       FUN = function(x){
         c(mean(x), sd(x))
@@ -506,8 +481,20 @@ dic_5
 dic_5Star
 ```
 
-With relatively limited computational power, I couldn't run more iterations of the final model to achieve a Gelman-Ruben Statistic in an acceptable range. 2 Chains of 200,000 iterations didn't provide satisfactory convergence diagnostics. Regardless, 
+## Computation
 
+For each model, I used the RJAGS and CODA packages to obtain approximate samples from the posterior distribution and run diagnostics for convergence. I calculated the Gelman-Rubin statistic and Effective Sample Size as well as visually inspected trace plots of parameters to confirm convergence. I accepted convergence when the G-R statistic was close to 1 and the Effective Sample Size was in the thousands. For the first 3 models with few parameters, convergence was fast without requiring many iterations in MCMC. When I included random effects and interactions of random effects, it took orders of magnitude more iterations in MCMC to converge. Across more complex models, I had to tighten the priors around coefficients and population variance to improve convergence. Even though this is subjective, I justify this by the nature of the models. All of these models are trying to detect differences in log(time) with relatively little variance. Because of this, values of regression coefficients are bound to be very small, requiring tighter Gaussian priors. Additionally, there is a sample size of n=1618, so the effect of the prior should be relatively small in the end. 
 
+## Results
+
+With relatively limited computational power, I couldn't run more iterations of the final model to achieve a Gelman-Ruben Statistic in an acceptable range. 2 Chains of 200,000 iterations didn't provide satisfactory convergence diagnostics. Regardless, model number 2 has a relatively similar deviance without having so many parameters and converged multiple orders of magnitude faster than model 5. In compliance with parsimony, I select model 2 as being the best model in terms of fit. 
+
+Across all models fit, no interaction coefficient had a 95% Credible set that did not include 0. Because of this, I conclude that the benefit of wearing Nike Vaporflys does **NOT** vary across gender, runner, or marathon course substantially. However, every model that I fit suggests that wearing Vaporflys does substantially decrease a runner’s marathon time. Using the estimate from model 2, a runner wearing Vaporflys with all other variables held constant decreases their marathon time on average by about `r round(100*(1-exp(summary(samples_2)$statistics[2, 1])), 3)`% with a 95% credible interval of (`r round(100*(1-exp(summary(samples_2)$quantiles[2, c(5, 1)])), 3)`)%
+
+## Conclusions
+
+While this seems like a relatively small reduction, on the scale of marathons, decreasing your overall time by 1 minute in a 2+ hour race is considered a huge accomplishment. When the consistency of the athletes recorded in this dataset are considered, it is clear that Nike Vaporflys significantly decrease marathon times nearly uniformly. 
+
+The structure of the data in this study did not lead to very sophisticated tests for the effect of Vaporflys on individual runners. In the most ideal case, every runner would be measured running a marathon while wearing Vaporflys and some other shoes. Because of this, I take the result of no effect across runners with caution as there were very few runners in this dataset that recorded times with different shoes. 
 
 

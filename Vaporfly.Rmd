@@ -63,15 +63,11 @@ ggplot(data=final, mapping=aes(x=time_minutes))+
 
 ggplot(data=final%>%filter(sex==F), mapping=aes(x=log(time_minutes)))+
   labs(title="FIGURE 2: Distribution of Men's log time", x="Men's Log minutes")+
-  geom_histogram(bins=85, fill="blue", col="black")
+  geom_histogram(bins=85, fill="blue", col="black", position = "identity")
 
 ggplot(data=final%>%filter(sex==T), mapping=aes(x=log(time_minutes)))+
   labs(title="FIGURE 3: Distribution of Women's log time", x="Women's Log minutes")+
-  geom_histogram(bins=85, fill="pink", col="black")
-
-ggplot(data=final, mapping=aes(x=log(time_minutes)), fill=as.factor(sex))+
-  labs(title="FIGURE 2: Histogram of log(time)", x="log(Time)")+
-  geom_histogram(bins=75, col="black")
+  geom_histogram(bins=85, fill="pink", col="black", position="identity")
 
 ggplot(data=final, mapping=aes(x=time_minutes, fill=vaporfly))+
   geom_histogram(bins = 60)
@@ -427,10 +423,10 @@ model_string = textConnection("model{
 
 inits = list(B0=2.3, B1=-0.2, B2=0, C1=-0.37, C2=0, C3=0,C4=0.05, M=rep(0, n_mar), R=rep(0, n_run), tau=1)
 model = jags.model(model_string, data=data, inits = inits, n.chains = 2, quiet=T)
-update(model, 10000, progress.bar="none")
+update(model, 30000, progress.bar="none")
 
 params = c("B0", "B1", "B2","C1", "C2", "C3", "C4", "sigma", "M", "R")
-samples_5 = coda.samples(model, variable.names = params, n.iter=10000, progress.bar="none")
+samples_5_large = coda.samples(model, variable.names = params, n.iter=30000, progress.bar="none")
 
 dic_5 = dic.samples(model, n.iter=1000, progress.bar="none")
 ```
@@ -438,7 +434,7 @@ dic_5 = dic.samples(model, n.iter=1000, progress.bar="none")
 
 This model suffers from over-parameterization. From the MCMC diagnostics, it appears that any term involving marathon effects $M_i, C_1, C_4$ failed to converge. To show this, Below are the trace plots of those parameters. I would move forward by removing these terms in the model. Their inclusion leads to a deceiving DIC value since their posteriors are not approximately Normal even after thousands of MCMC iterations.
 ```{r}
-plot(samples_5[[1]][, c(4, 8, 9:11)])
+plot(samples_5_large[[1]][, c(4, 8, 9:11)])
 ```
 
 Proposing the following adjustment to model 5 for the most compicated model fit. I will keep the notation of $C_2, C_3$ to denote that this is a subset of a model previously attempted. I will also tighen the prior variances. 
@@ -506,6 +502,7 @@ dic_1
 dic_2
 dic_3
 dic_4
+dic_5
 dic_5Star
 ```
 

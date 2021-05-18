@@ -59,7 +59,7 @@ final = full_join(men, women) %>%
 
 # Visualizations
 
-![](Vaporfly_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-5.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-6.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-7.png)<!-- -->
+![](Vaporfly_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-5.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-4-6.png)<!-- -->
 
 # Methods
 
@@ -584,10 +584,10 @@ model_string = textConnection("model{
 
 inits = list(B0=2.3, B1=-0.2, B2=0, C1=-0.37, C2=0, C3=0,C4=0.05, M=rep(0, n_mar), R=rep(0, n_run), tau=1)
 model = jags.model(model_string, data=data, inits = inits, n.chains = 2, quiet=T)
-update(model, 10000, progress.bar="none")
+update(model, 30000, progress.bar="none")
 
 params = c("B0", "B1", "B2","C1", "C2", "C3", "C4", "sigma", "M", "R")
-samples_5 = coda.samples(model, variable.names = params, n.iter=10000, progress.bar="none")
+samples_5_large = coda.samples(model, variable.names = params, n.iter=30000, progress.bar="none")
 
 dic_5 = dic.samples(model, n.iter=1000, progress.bar="none")
 ```
@@ -602,7 +602,7 @@ posteriors are not approximately Normal even after thousands of MCMC
 iterations.
 
 ``` r
-plot(samples_5[[1]][, c(4, 8, 9:11)])
+plot(samples_5_large[[1]][, c(4, 8, 9:11)])
 ```
 
 ![](Vaporfly_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
@@ -714,6 +714,14 @@ dic_4
     ## Mean deviance:  -5146 
     ## penalty 26.03 
     ## Penalized deviance: -5120
+
+``` r
+dic_5
+```
+
+    ## Mean deviance:  -5525 
+    ## penalty 229.8 
+    ## Penalized deviance: -5295
 
 ``` r
 dic_5Star

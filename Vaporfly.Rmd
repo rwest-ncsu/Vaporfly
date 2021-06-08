@@ -27,7 +27,7 @@ library(tidyr)#Data tidying
 library(dplyr)#Data wrangling
 library(varhandle)
 library(knitr)#Display tables
-library(readr)
+library(readr)#Read in the CSV files
 ```
 
 # Data Import

@@ -16,9 +16,9 @@ Robert West
     -   [Model 4](#model-4)
     -   [Model 5](#model-5)
     -   [Model Comparisons](#model-comparisons)
-    -   [Computation](#computation)
-    -   [Results](#results)
-    -   [Conclusions](#conclusions)
+-   [Computation](#computation)
+-   [Results](#results)
+-   [Conclusions](#conclusions)
 
 # Introduction
 
@@ -729,7 +729,7 @@ dic_5Star
     ## penalty 583.1 
     ## Penalized deviance: -4709
 
-## Computation
+# Computation
 
 For each model, I used the RJAGS and CODA packages to obtain approximate
 samples from the posterior distribution and run diagnostics for
@@ -750,7 +750,7 @@ requiring tighter Gaussian priors. Additionally, there is a sample size
 of n=1618, so the effect of the prior should be relatively small in the
 end.
 
-## Results
+# Results
 
 With relatively limited computational power, I couldn’t run more
 iterations of the final model to achieve a Gelman-Ruben Statistic in an
@@ -770,7 +770,7 @@ time. Using the estimate from model 2, a runner wearing Vaporflys with
 all other variables held constant decreases their marathon time on
 average by about 1.87% with a 95% credible interval of (1.13, 2.622)%
 
-## Conclusions
+# Conclusions
 
 While this seems like a relatively small reduction, on the scale of
 marathons, decreasing your overall time by 1 minute in a 2+ hour race is

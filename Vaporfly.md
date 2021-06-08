@@ -3,6 +3,23 @@ Vaporfly
 Robert West
 5/11/2021
 
+-   [Introduction](#introduction)
+-   [Packages](#packages)
+-   [Data Import](#data-import)
+-   [Data Cleaning](#data-cleaning)
+-   [Methods](#methods)
+-   [Creating analysis variables](#creating-analysis-variables)
+-   [Models Under Consideration](#models-under-consideration)
+    -   [Model 1](#model-1)
+    -   [Model 2](#model-2)
+    -   [Model 3](#model-3)
+    -   [Model 4](#model-4)
+    -   [Model 5](#model-5)
+    -   [Model Comparisons](#model-comparisons)
+    -   [Computation](#computation)
+    -   [Results](#results)
+    -   [Conclusions](#conclusions)
+
 # Introduction
 
 Since their introduction to the market in 2016, Nike’s `Vaporfly` shoes
@@ -82,8 +99,7 @@ treat log(time) as the response as the time variable was a little too
 right-skewed to meet the Normality condition of my models. Taking the
 log allowed for more reasonable Gaussian assumptions (Figure 2, 3).
 Using a consistent Log-Normal likelihood allowed for more precise model
-comparison after fitting as
-well.
+comparison after fitting as well.
 
 ![](Vaporfly_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
@@ -100,21 +116,19 @@ n = length(logy)
 
 ## Model 1
 
-  
 ![
 log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
 \\mu\_i = B\_0 + B\_1V\_i\\\\
 V\_i \\in {0,1}: Vaporfly\_i\\\\
 B\_0, B\_1 \\sim N(0, (\\sqrt{10})^2)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%20%2B%20B_1V_i%5C%5C%0AV_i%20%5Cin%20%7B0%2C1%7D%3A%20Vaporfly_i%5C%5C%0AB_0%2C%20B_1%20%5Csim%20N%280%2C%20%28%5Csqrt%7B10%7D%29%5E2%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A
-"
-log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
-\\mu_i = B_0 + B_1V_i\\\\
-V_i \\in {0,1}: Vaporfly_i\\\\
-B_0, B_1 \\sim N(0, (\\sqrt{10})^2)\\\\
-\\sigma^2 \\sim InvGamma(0.1, 1)
-")  
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%20%2B%20B_1V_i%5C%5C%0AV_i%20%5Cin%20%7B0%2C1%7D%3A%20Vaporfly_i%5C%5C%0AB_0%2C%20B_1%20%5Csim%20N%280%2C%20%28%5Csqrt%7B10%7D%29%5E2%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A "
+log(Y_i) \sim N(\mu_i, \sigma^2)\\
+\mu_i = B_0 + B_1V_i\\
+V_i \in {0,1}: Vaporfly_i\\
+B_0, B_1 \sim N(0, (\sqrt{10})^2)\\
+\sigma^2 \sim InvGamma(0.1, 1)
+")
 
 This model suggests that the only contributing factor to a runner’s time
 is the binary `vaporfly` variable:
@@ -165,7 +179,6 @@ more thoroughly.
 
 ## Model 2
 
-  
 ![
 log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
 \\mu\_i = B\_0+B\_1V\_i+B\_2S\_i\\\\
@@ -173,15 +186,14 @@ V\_i \\in 0,1: Vaporfly\\\\
 S\_i \\in 0,1: Sex\\\\
 B\_0, B\_1, B\_2 \\sim N(0, 10)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)\\\\
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
-"
-log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
-\\mu_i = B_0+B_1V_i+B_2S_i\\\\
-V_i \\in 0,1: Vaporfly\\\\
-S_i \\in 0,1: Sex\\\\
-B_0, B_1, B_2 \\sim N(0, 10)\\\\
-\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
-")  
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A "
+log(Y_i) \sim N(\mu_i, \sigma^2)\\
+\mu_i = B_0+B_1V_i+B_2S_i\\
+V_i \in 0,1: Vaporfly\\
+S_i \in 0,1: Sex\\
+B_0, B_1, B_2 \sim N(0, 10)\\
+\sigma^2 \sim InvGamma(0.1, 1)\\
+")
 
 ``` r
 X_mod = X%>%select(1, vaporfly, sex)%>%
@@ -263,7 +275,6 @@ gelman.diag(samples_2)
 
 ## Model 3
 
-  
 ![
 log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
 \\mu\_i = \\beta\_0+\\beta1V\_i+C\_1S\_i+\\beta\_3S\_i\*V\_i\\\\
@@ -272,16 +283,15 @@ S\_i \\in 0,1: Sex\\\\
 \\beta\_i \\sim N(0, 10)\\\\
 C\_1 \\sim N(0, 10)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)\\\\
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2BC_1S_i%2B%5Cbeta_3S_i%2AV_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Cbeta_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0AC_1%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
-"
-log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
-\\mu_i = \\beta_0+\\beta1V_i+C_1S_i+\\beta_3S_i*V_i\\\\
-V_i \\in 0,1: Vaporfly\\\\
-S_i \\in 0,1: Sex\\\\
-\\beta_i \\sim N(0, 10)\\\\
-C_1 \\sim N(0, 10)\\\\
-\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
-")  
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2BC_1S_i%2B%5Cbeta_3S_i%2AV_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Cbeta_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0AC_1%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A "
+log(Y_i) \sim N(\mu_i, \sigma^2)\\
+\mu_i = \beta_0+\beta1V_i+C_1S_i+\beta_3S_i*V_i\\
+V_i \in 0,1: Vaporfly\\
+S_i \in 0,1: Sex\\
+\beta_i \sim N(0, 10)\\
+C_1 \sim N(0, 10)\\
+\sigma^2 \sim InvGamma(0.1, 1)\\
+")
 
 ``` r
 X_mod = X%>%select(1, vaporfly, sex)%>%
@@ -365,28 +375,25 @@ gelman.diag(samples_3)
 
 ## Model 4
 
-  
 ![
 log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
-\\mu\_i = \\beta\_0+\\beta1V\_i+\\beta\_2S\_i+\\beta\_3S\_i\*V\_i +
-\\alpha\_i\\\\
+\\mu\_i = \\beta\_0+\\beta1V\_i+\\beta\_2S\_i+\\beta\_3S\_i\*V\_i + \\alpha\_i\\\\
 V\_i \\in 0,1: Vaporfly\\\\
 S\_i \\in 0,1: Sex\\\\
 \\alpha\_i: marathon \\space \\space effect\\\\
 \\beta\_i \\sim N(0, 1)\\\\
 \\alpha\_i \\sim N(0, 1)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)\\\\
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2B%5Cbeta_2S_i%2B%5Cbeta_3S_i%2AV_i%20%2B%20%5Calpha_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Calpha_i%3A%20marathon%20%5Cspace%20%5Cspace%20effect%5C%5C%0A%5Cbeta_i%20%5Csim%20N%280%2C%201%29%5C%5C%0A%5Calpha_i%20%5Csim%20N%280%2C%201%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A
-"
-log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
-\\mu_i = \\beta_0+\\beta1V_i+\\beta_2S_i+\\beta_3S_i*V_i + \\alpha_i\\\\
-V_i \\in 0,1: Vaporfly\\\\
-S_i \\in 0,1: Sex\\\\
-\\alpha_i: marathon \\space \\space effect\\\\
-\\beta_i \\sim N(0, 1)\\\\
-\\alpha_i \\sim N(0, 1)\\\\
-\\sigma^2 \\sim InvGamma(0.1, 1)\\\\
-")  
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20%5Cbeta_0%2B%5Cbeta1V_i%2B%5Cbeta_2S_i%2B%5Cbeta_3S_i%2AV_i%20%2B%20%5Calpha_i%5C%5C%0AV_i%20%5Cin%200%2C1%3A%20Vaporfly%5C%5C%0AS_i%20%5Cin%200%2C1%3A%20Sex%5C%5C%0A%5Calpha_i%3A%20marathon%20%5Cspace%20%5Cspace%20effect%5C%5C%0A%5Cbeta_i%20%5Csim%20N%280%2C%201%29%5C%5C%0A%5Calpha_i%20%5Csim%20N%280%2C%201%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%5C%5C%0A "
+log(Y_i) \sim N(\mu_i, \sigma^2)\\
+\mu_i = \beta_0+\beta1V_i+\beta_2S_i+\beta_3S_i*V_i + \alpha_i\\
+V_i \in 0,1: Vaporfly\\
+S_i \in 0,1: Sex\\
+\alpha_i: marathon \space \space effect\\
+\beta_i \sim N(0, 1)\\
+\alpha_i \sim N(0, 1)\\
+\sigma^2 \sim InvGamma(0.1, 1)\\
+")
 
 ``` r
 X_mod = X%>%select(1, vaporfly, sex, marathon)%>%
@@ -469,7 +476,7 @@ This model suggests that there is no significant difference between
 marathon courses since the effective sample sizes are so small even
 after 50,000 iterations of MCMC. From this, I conclude that the marathon
 effects are constant and are “encoded” in the constant intercept
-![\\beta\_0](https://latex.codecogs.com/png.latex?%5Cbeta_0 "\\beta_0").
+![\\beta\_0](https://latex.codecogs.com/png.latex?%5Cbeta_0 "\beta_0").
 For further justification:
 
 ``` r
@@ -493,23 +500,22 @@ alphas %>%
 ![](Vaporfly_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 Clearly, all of the
-![\\alpha](https://latex.codecogs.com/png.latex?%5Calpha "\\alpha")
+![\\alpha](https://latex.codecogs.com/png.latex?%5Calpha "\alpha")
 effects behave similarly and produced relatively similar estimates and
 Posterior Distributions. Because of this and the low effective sample
-size of the ![\\beta\_0](https://latex.codecogs.com/png.latex?%5Cbeta_0
-"\\beta_0") in this model, I propose the removal of the Marathon effect
-term in the model. However, we have yet to consider the interaction that
-the use of Vaporflys may have with age and marathon course. Good
-modeling practice says to include all lower order terms, so I will keep
-the marathon effect.
+size of the
+![\\beta\_0](https://latex.codecogs.com/png.latex?%5Cbeta_0 "\beta_0")
+in this model, I propose the removal of the Marathon effect term in the
+model. However, we have yet to consider the interaction that the use of
+Vaporflys may have with age and marathon course. Good modeling practice
+says to include all lower order terms, so I will keep the marathon
+effect.
 
 ## Model 5
 
-  
 ![
 log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
-\\mu\_i =
-B\_0+B\_1V\_i+B\_2S\_i+M\_i+R\_i+C\_1M\_iR\_i+C\_2R\_iV\_i+C\_3S\_iV\_i+C\_4M\_iV\_i\\\\
+\\mu\_i = B\_0+B\_1V\_i+B\_2S\_i+M\_i+R\_i+C\_1M\_iR\_i+C\_2R\_iV\_i+C\_3S\_iV\_i+C\_4M\_iV\_i\\\\
 V\_i : Indicator \\space of \\space Vaporflys\\\\
 S\_i : Sex\\\\
 M\_i: Marathon \\space \\space effect\\\\
@@ -519,20 +525,19 @@ M\_i \\sim N(0, 10)\\\\
 R\_i \\sim N(0, 10)\\\\
 C\_1, C\_2, C\_3, C\_4 \\sim N(0, 10)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%2BM_i%2BR_i%2BC_1M_iR_i%2BC_2R_iV_i%2BC_3S_iV_i%2BC_4M_iV_i%5C%5C%0AV_i%20%3A%20Indicator%20%5Cspace%20of%20%5Cspace%20Vaporflys%5C%5C%0AS_i%20%3A%20Sex%5C%5C%0AM_i%3A%20Marathon%20%5Cspace%20%5Cspace%20effect%5C%5C%0AR_i%3A%20Runner%20%5Cspace%20%5Cspace%20effect%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%2010%29%5C%5C%0AM_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0AR_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0AC_1%2C%20C_2%2C%20C_3%2C%20C_4%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A
-"
-log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
-\\mu_i = B_0+B_1V_i+B_2S_i+M_i+R_i+C_1M_iR_i+C_2R_iV_i+C_3S_iV_i+C_4M_iV_i\\\\
-V_i : Indicator \\space of \\space Vaporflys\\\\
-S_i : Sex\\\\
-M_i: Marathon \\space \\space effect\\\\
-R_i: Runner \\space \\space effect\\\\
-B_0, B_1, B_2 \\sim N(0, 10)\\\\
-M_i \\sim N(0, 10)\\\\
-R_i \\sim N(0, 10)\\\\
-C_1, C_2, C_3, C_4 \\sim N(0, 10)\\\\
-\\sigma^2 \\sim InvGamma(0.1, 1)
-")  
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%2BM_i%2BR_i%2BC_1M_iR_i%2BC_2R_iV_i%2BC_3S_iV_i%2BC_4M_iV_i%5C%5C%0AV_i%20%3A%20Indicator%20%5Cspace%20of%20%5Cspace%20Vaporflys%5C%5C%0AS_i%20%3A%20Sex%5C%5C%0AM_i%3A%20Marathon%20%5Cspace%20%5Cspace%20effect%5C%5C%0AR_i%3A%20Runner%20%5Cspace%20%5Cspace%20effect%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%2010%29%5C%5C%0AM_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0AR_i%20%5Csim%20N%280%2C%2010%29%5C%5C%0AC_1%2C%20C_2%2C%20C_3%2C%20C_4%20%5Csim%20N%280%2C%2010%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A "
+log(Y_i) \sim N(\mu_i, \sigma^2)\\
+\mu_i = B_0+B_1V_i+B_2S_i+M_i+R_i+C_1M_iR_i+C_2R_iV_i+C_3S_iV_i+C_4M_iV_i\\
+V_i : Indicator \space of \space Vaporflys\\
+S_i : Sex\\
+M_i: Marathon \space \space effect\\
+R_i: Runner \space \space effect\\
+B_0, B_1, B_2 \sim N(0, 10)\\
+M_i \sim N(0, 10)\\
+R_i \sim N(0, 10)\\
+C_1, C_2, C_3, C_4 \sim N(0, 10)\\
+\sigma^2 \sim InvGamma(0.1, 1)
+")
 
 ``` r
 X_mod = X%>%select(1, vaporfly, sex, marathon, match_name)%>%
@@ -589,13 +594,12 @@ dic_5 = dic.samples(model, n.iter=1000, progress.bar="none")
 ```
 
 This model suffers from over-parameterization. From the MCMC
-diagnostics, it appears that any term involving marathon effects ![M\_i,
-C\_1, C\_4](https://latex.codecogs.com/png.latex?M_i%2C%20C_1%2C%20C_4
-"M_i, C_1, C_4") failed to converge. To show this, Below are the trace
-plots of those parameters. I would move forward by removing these terms
-in the model. Their inclusion leads to a deceiving DIC value since their
-posteriors are not approximately Normal even after thousands of MCMC
-iterations.
+diagnostics, it appears that any term involving marathon effects
+![M\_i, C\_1, C\_4](https://latex.codecogs.com/png.latex?M_i%2C%20C_1%2C%20C_4 "M_i, C_1, C_4")
+failed to converge. To show this, Below are the trace plots of those
+parameters. I would move forward by removing these terms in the model.
+Their inclusion leads to a deceiving DIC value since their posteriors
+are not approximately Normal even after thousands of MCMC iterations.
 
 ``` r
 plot(samples_5_large[[1]][, c(4, 8, 9:11)])
@@ -604,12 +608,11 @@ plot(samples_5_large[[1]][, c(4, 8, 9:11)])
 ![](Vaporfly_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->![](Vaporfly_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 Proposing the following adjustment to model 5 for the most compicated
-model fit. I will keep the notation of ![C\_2,
-C\_3](https://latex.codecogs.com/png.latex?C_2%2C%20C_3 "C_2, C_3") to
-denote that this is a subset of a model previously attempted. I will
+model fit. I will keep the notation of
+![C\_2, C\_3](https://latex.codecogs.com/png.latex?C_2%2C%20C_3 "C_2, C_3")
+to denote that this is a subset of a model previously attempted. I will
 also tighen the prior variances.
 
-  
 ![
 log(Y\_i) \\sim N(\\mu\_i, \\sigma^2)\\\\
 \\mu\_i = B\_0+B\_1V\_i+B\_2S\_i+R\_i+C\_2R\_iV\_i+C\_3S\_iV\_i\\\\
@@ -620,18 +623,17 @@ B\_0, B\_1, B\_2 \\sim N(0, 1)\\\\
 R\_i \\sim N(0, 1)\\\\
 C\_2, C\_3\\sim N(0, 1)\\\\
 \\sigma^2 \\sim InvGamma(0.1, 1)
-](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%2BR_i%2BC_2R_iV_i%2BC_3S_iV_i%5C%5C%0AV_i%20%3A%20Indicator%20%5Cspace%20%5Cspace%20of%20%5Cspace%20%5Cspace%20Vaporflys%5C%5C%0AS_i%20%3A%20Sex%5C%5C%0AR_i%3A%20Runner%20%5Cspace%20%5Cspace%20effect%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%201%29%5C%5C%0AR_i%20%5Csim%20N%280%2C%201%29%5C%5C%0AC_2%2C%20C_3%5Csim%20N%280%2C%201%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A
-"
-log(Y_i) \\sim N(\\mu_i, \\sigma^2)\\\\
-\\mu_i = B_0+B_1V_i+B_2S_i+R_i+C_2R_iV_i+C_3S_iV_i\\\\
-V_i : Indicator \\space \\space of \\space \\space Vaporflys\\\\
-S_i : Sex\\\\
-R_i: Runner \\space \\space effect\\\\
-B_0, B_1, B_2 \\sim N(0, 1)\\\\
-R_i \\sim N(0, 1)\\\\
-C_2, C_3\\sim N(0, 1)\\\\
-\\sigma^2 \\sim InvGamma(0.1, 1)
-")  
+](https://latex.codecogs.com/png.latex?%0Alog%28Y_i%29%20%5Csim%20N%28%5Cmu_i%2C%20%5Csigma%5E2%29%5C%5C%0A%5Cmu_i%20%3D%20B_0%2BB_1V_i%2BB_2S_i%2BR_i%2BC_2R_iV_i%2BC_3S_iV_i%5C%5C%0AV_i%20%3A%20Indicator%20%5Cspace%20%5Cspace%20of%20%5Cspace%20%5Cspace%20Vaporflys%5C%5C%0AS_i%20%3A%20Sex%5C%5C%0AR_i%3A%20Runner%20%5Cspace%20%5Cspace%20effect%5C%5C%0AB_0%2C%20B_1%2C%20B_2%20%5Csim%20N%280%2C%201%29%5C%5C%0AR_i%20%5Csim%20N%280%2C%201%29%5C%5C%0AC_2%2C%20C_3%5Csim%20N%280%2C%201%29%5C%5C%0A%5Csigma%5E2%20%5Csim%20InvGamma%280.1%2C%201%29%0A "
+log(Y_i) \sim N(\mu_i, \sigma^2)\\
+\mu_i = B_0+B_1V_i+B_2S_i+R_i+C_2R_iV_i+C_3S_iV_i\\
+V_i : Indicator \space \space of \space \space Vaporflys\\
+S_i : Sex\\
+R_i: Runner \space \space effect\\
+B_0, B_1, B_2 \sim N(0, 1)\\
+R_i \sim N(0, 1)\\
+C_2, C_3\sim N(0, 1)\\
+\sigma^2 \sim InvGamma(0.1, 1)
+")
 
 ``` r
 X_mod = X%>%select(1, vaporfly, sex, match_name)%>%
